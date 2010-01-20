@@ -6,17 +6,35 @@ function model = createGLCMGrayModel(imageArray, segmentation)
 showPlot = 1;
 %load the images into local variables
 for i=1:size(imageArray,2)
-    gradeImage(i,1).val = imread(imageArray(i).val);
+    gradeImage(i,1).val = imread(imageArray(i).val); %#ok<AGROW>
+    
+    % crop of longer side's edges to make square
+    [min_dimension,index_min]=min([size(gradeImage(i,1).val,1),size(gradeImage(i,1).val,2)]);
+    [max_dimension]=max([size(gradeImage(i,1).val,1),size(gradeImage(i,1).val,2)]);
+    edge_count=floor((max_dimension-min_dimension)/2);
+    if max_dimension~=min_dimension && edge_count>0
+        if index_min==1 % first dimension
+            gradeImage(i,1).val=gradeImage(i,1).val(:,edge_count+1:(max_dimension-edge_count),:); %#ok<AGROW>
+        else %index_min==2    % second dimension
+            gradeImage(i,1).val=gradeImage(i,1).val(edge_count+1:(max_dimension-edge_count),:,:); %#ok<AGROW>
+        end
+    end
+
+    rowSegment(i) = floor(size(gradeImage(i,1).val,1)/segmentation); %#ok<AGROW>
+    columnSegment(i) = floor(size(gradeImage(i,1).val,2)/segmentation); %#ok<AGROW>
 end
-%Create the image segmentation 
-rowSegment = floor(size(gradeImage(1,1).val,1)/segmentation);
-columnSegment = floor(size(gradeImage(1,1).val,2)/segmentation);
+
+
+%Create the image segmentation
+
+
+
 
 for curr_mat=1:size(gradeImage,1)
     counter = 2;
     for i=1:segmentation
         for j=1:segmentation           
-            gradeImage(curr_mat,counter).val = gradeImage(curr_mat,1).val((i-1)*rowSegment+1:i*rowSegment,(j-1)*columnSegment+1:j*columnSegment,:);       
+            gradeImage(curr_mat,counter).val = gradeImage(curr_mat,1).val((i-1)*rowSegment(curr_mat)+1:i*rowSegment(curr_mat),(j-1)*columnSegment(curr_mat)+1:j*columnSegment(curr_mat),:);       
             counter = counter + 1;
         end
     end

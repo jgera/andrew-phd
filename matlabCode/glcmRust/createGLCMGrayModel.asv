@@ -8,9 +8,16 @@ showPlot = 1;
 for i=1:size(imageArray,2)
     gradeImage(i,1).val = imread(imageArray(i).val);
 end
-%Create the image segmentation 
+
+[min_dimension,index_min]=min([size(gradeImage(i,1).val,1),size(gradeImage(i,1).val,2)]);
+[max_dimension,index_max]=min([size(gradeImage(i,1).val,1),size(gradeImage(i,1).val,2)]);
+gradeImage(i,1).val=(max_dimension-min_dimension)/2:max_dimension-(max_dimension-min_dimension)/2
+
+%Create the image segmentation
 rowSegment = floor(size(gradeImage(1,1).val,1)/segmentation);
 columnSegment = floor(size(gradeImage(1,1).val,2)/segmentation);
+
+
 
 for curr_mat=1:size(gradeImage,1)
     counter = 2;
