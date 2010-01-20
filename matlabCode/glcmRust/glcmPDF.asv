@@ -1,0 +1,15 @@
+%This code uses the mean and std generated to find the PDF of a sample
+%material
+load glcmData.mat
+gradeImage(1).val = imread('gradeA.jpg');
+gradeImage(2).val = imread('gradeB.jpg');
+gradeImage(3).val = imread('gradeC.jpg');
+gradeImage(4).val = imread('gradeD.jpg');
+
+%Randomly select X by X patches to test with
+pixels = 50; %Determine how big the image is
+randRowPos = floor(size(gradeImage(1).val))
+
+%Construct the GLCM for the testImage
+
+%PDF of the sample

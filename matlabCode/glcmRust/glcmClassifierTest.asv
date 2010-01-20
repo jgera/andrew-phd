@@ -1,0 +1,6 @@
+%GLCM test code for rust segmentation
+image = imread('rustImage.jpg');
+%Build the model for sample material 
+imageArray(1).val = 'sample1.jpg';
+segmentation = 4;
+model = createGLCMModel(imageArray, segmentation);

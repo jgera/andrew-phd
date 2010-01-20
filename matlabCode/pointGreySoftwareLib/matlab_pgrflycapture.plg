@@ -1,0 +1,100 @@
+<html>
+<body>
+<pre>
+<h1>Build Log</h1>
+<h3>
+--------------------Configuration: matlab_pgrflycapture - Win32 Release--------------------
+</h3>
+<h3>Command Lines</h3>
+Creating temporary file "C:\DOCUME~1\gchow\LOCALS~1\Temp\RSP309.bat" with contents
+[
+@echo off
+mex -f "pgrmex.bat" -outdir .\Release matStopFly.c
+]
+Creating command line "C:\DOCUME~1\gchow\LOCALS~1\Temp\RSP309.bat"
+Creating temporary file "C:\DOCUME~1\gchow\LOCALS~1\Temp\RSP30A.bat" with contents
+[
+@echo off
+mex -f "pgrmex.bat" -outdir .\Release matSetFlyTrigger.c
+]
+Creating command line "C:\DOCUME~1\gchow\LOCALS~1\Temp\RSP30A.bat"
+Creating temporary file "C:\DOCUME~1\gchow\LOCALS~1\Temp\RSP30B.bat" with contents
+[
+@echo off
+mex -f "pgrmex.bat" -outdir .\Release matSetFlyShutterSpeed.c
+]
+Creating command line "C:\DOCUME~1\gchow\LOCALS~1\Temp\RSP30B.bat"
+Creating temporary file "C:\DOCUME~1\gchow\LOCALS~1\Temp\RSP30C.bat" with contents
+[
+@echo off
+mex -f "pgrmex.bat" -outdir .\Release matSetFlyGain.c
+]
+Creating command line "C:\DOCUME~1\gchow\LOCALS~1\Temp\RSP30C.bat"
+Creating temporary file "C:\DOCUME~1\gchow\LOCALS~1\Temp\RSP30D.bat" with contents
+[
+@echo off
+mex -f "pgrmex.bat" -outdir .\Release matInitFly.c
+]
+Creating command line "C:\DOCUME~1\gchow\LOCALS~1\Temp\RSP30D.bat"
+Creating temporary file "C:\DOCUME~1\gchow\LOCALS~1\Temp\RSP30E.bat" with contents
+[
+@echo off
+mex -f "pgrmex.bat" -outdir .\Release matGrabFlyImg.c
+]
+Creating command line "C:\DOCUME~1\gchow\LOCALS~1\Temp\RSP30E.bat"
+Creating temporary file "C:\DOCUME~1\gchow\LOCALS~1\Temp\RSP30F.bat" with contents
+[
+@echo off
+mex -f "pgrmex.bat" -outdir .\Release matGetFlyShutterSpeed.c
+]
+Creating command line "C:\DOCUME~1\gchow\LOCALS~1\Temp\RSP30F.bat"
+Creating temporary file "C:\DOCUME~1\gchow\LOCALS~1\Temp\RSP310.bat" with contents
+[
+@echo off
+mex -f "pgrmex.bat" -outdir .\Release matGetFlyGain.c
+]
+Creating command line "C:\DOCUME~1\gchow\LOCALS~1\Temp\RSP310.bat"
+Creating temporary file "C:\DOCUME~1\gchow\LOCALS~1\Temp\RSP311.bat" with contents
+[
+@echo off
+mex -f "pgrmex.bat" -outdir .\Release matGetFlyCount.c
+]
+Creating command line "C:\DOCUME~1\gchow\LOCALS~1\Temp\RSP311.bat"
+<h3>Output Window</h3>
+Performing Custom Build Step on .\matStopFly.c
+Performing Custom Build Step on .\matSetFlyTrigger.c
+Performing Custom Build Step on .\matSetFlyShutterSpeed.c
+Performing Custom Build Step on .\matSetFlyGain.c
+Performing Custom Build Step on .\matInitFly.c
+Performing Custom Build Step on .\matGrabFlyImg.c
+Performing Custom Build Step on .\matGetFlyShutterSpeed.c
+Performing Custom Build Step on .\matGetFlyGain.c
+Performing Custom Build Step on .\matGetFlyCount.c
+Creating temporary file "C:\DOCUME~1\gchow\LOCALS~1\Temp\RSP32D.bat" with contents
+[
+@echo off
+xcopy /f/y .\Release\*.dll matSrc
+xcopy /f/y P:\pgrflycapture\release\1.4.0.018\bin\pgrflycapture.dll matSrc
+]
+Creating command line "C:\DOCUME~1\gchow\LOCALS~1\Temp\RSP32D.bat"
+
+W:\gchow\win32\support\matlab_pgrflycapture\Release\matStopFly.dll -> W:\gchow\win32\support\matlab_pgrflycapture\matSrc\matStopFly.dll
+W:\gchow\win32\support\matlab_pgrflycapture\Release\matSetFlyTrigger.dll -> W:\gchow\win32\support\matlab_pgrflycapture\matSrc\matSetFlyTrigger.dll
+W:\gchow\win32\support\matlab_pgrflycapture\Release\matSetFlyShutterSpeed.dll -> W:\gchow\win32\support\matlab_pgrflycapture\matSrc\matSetFlyShutterSpeed.dll
+W:\gchow\win32\support\matlab_pgrflycapture\Release\matSetFlyGain.dll -> W:\gchow\win32\support\matlab_pgrflycapture\matSrc\matSetFlyGain.dll
+W:\gchow\win32\support\matlab_pgrflycapture\Release\matInitFly.dll -> W:\gchow\win32\support\matlab_pgrflycapture\matSrc\matInitFly.dll
+W:\gchow\win32\support\matlab_pgrflycapture\Release\matGrabFlyImg.dll -> W:\gchow\win32\support\matlab_pgrflycapture\matSrc\matGrabFlyImg.dll
+W:\gchow\win32\support\matlab_pgrflycapture\Release\matGetFlyShutterSpeed.dll -> W:\gchow\win32\support\matlab_pgrflycapture\matSrc\matGetFlyShutterSpeed.dll
+W:\gchow\win32\support\matlab_pgrflycapture\Release\matGetFlyGain.dll -> W:\gchow\win32\support\matlab_pgrflycapture\matSrc\matGetFlyGain.dll
+W:\gchow\win32\support\matlab_pgrflycapture\Release\matGetFlyCount.dll -> W:\gchow\win32\support\matlab_pgrflycapture\matSrc\matGetFlyCount.dll
+9 File(s) copied
+P:\pgrflycapture\release\1.4.0.018\bin\PGRFlyCapture.dll -> W:\gchow\win32\support\matlab_pgrflycapture\matSrc\PGRFlyCapture.dll
+1 File(s) copied
+
+
+
+<h3>Results</h3>
+matlab_pgrflycapture.exe - 0 error(s), 0 warning(s)
+</pre>
+</body>
+</html>
