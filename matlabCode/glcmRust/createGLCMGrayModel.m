@@ -42,7 +42,7 @@ end
 
 %Get the GLCM properties of each image
 for curr_mat=1:size(gradeImage,1)
-    for curr_sample = 1:size(gradeImage,2) 
+    for curr_sample = 1:size(gradeImage,2)        
         properties(curr_mat, curr_sample).val = createGLCMProperties(gradeImage(curr_mat, curr_sample).val);
     end
 end
