@@ -14,8 +14,6 @@
 //#include <resource.h>
 #include <stdarg.h>			// Header File For Variable Argument Routines
 #include <functions.h>
-#include "RobotServer\_RobotServer.h"
-#include "RobotServer\_RobotServer_i.c"
 //#include <gl\glaux.h>		// Header File For The Glaux Library
 
 HDC			hDC=NULL;		// Private GDI Device Context
@@ -744,6 +742,28 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 			glTexCoord2f(u_m,v_m); glVertex3f(x_m,y_m,z_m);
 		glEnd();
 	}
+	//This code is to add a grid to the environment
+	// http://www.opengl.org/resources/code/samples/mjktips/grid/index.html
+	GLfloat grid2x2[2][2][3] = {
+    {{-2.0, -2.0, 0.0}, {4.0, -2.0, 0.0}},
+    {{-2.0, 3.0, 0.0}, {3.0, 4.0, 0.0}}
+	};
+
+	glEnable(GL_MAP2_VERTEX_3);
+	glMap2f(GL_MAP2_VERTEX_3,
+    0.0, 1.0,  /* U ranges 0..1 */
+    3,         /* U stride, 3 floats per coord */
+    2,         /* U is 2nd order, ie. linear */
+    0.0, 1.0,  /* V ranges 0..1 */
+    2 * 3,     /* V stride, row is 2 coords, 3 floats per coord */
+    2,         /* V is 2nd order, ie linear */
+    grid2x2);  /* control points */
+	glMapGrid2f(
+    5, 0.0, 1.0,
+    6, 0.0, 1.0);
+	glEvalMesh2(GL_LINE,
+    0, 5,   /* Starting at 0 mesh 5 steps (rows). */
+    0, 6);  /* Starting at 0 mesh 6 steps (columns). */
 	return TRUE;										// Everything Went OK
 }
 

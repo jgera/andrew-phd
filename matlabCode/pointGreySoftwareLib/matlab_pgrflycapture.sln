@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "matlab_pgrflycapture", "matlab_pgrflycapture.vcproj", "{D412F03A-8359-4B7A-8CF8-B36EA2D444B0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D412F03A-8359-4B7A-8CF8-B36EA2D444B0}.Debug|Win32.ActiveCfg = Debug|Win32
+		{D412F03A-8359-4B7A-8CF8-B36EA2D444B0}.Debug|Win32.Build.0 = Debug|Win32
+		{D412F03A-8359-4B7A-8CF8-B36EA2D444B0}.Release|Win32.ActiveCfg = Release|Win32
+		{D412F03A-8359-4B7A-8CF8-B36EA2D444B0}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

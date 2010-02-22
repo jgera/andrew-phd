@@ -49,7 +49,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="C:\MATLAB\R2009a\sys\lcc\lib;D:\UTS_SVN\Tools\EyeInHand;&quot;D:\andrew-phd\cppCode\Lesson10&quot;"
+				AdditionalIncludeDirectories="D:\PhdStorageCodes\cppCode\perspectivProjection"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
