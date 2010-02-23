@@ -46,10 +46,17 @@ rem ********************************************************************
 rem Compiler parameters
 rem ********************************************************************
 set COMPILER=lcc
-set COMPFLAGS=/c /Zp8 /GR /W3 /EHs /D_CRT_SECURE_NO_DEPRECATE /D_SCL_SECURE_NO_DEPRECATE /D_SECURE_SCL=0 /DMATLAB_MEX_FILE /nologo /MD
-set OPTIMFLAGS=/O2 /Oy- /DNDEBUG
-set DEBUGFLAGS=/Zi /Fd"%OUTDIR%%MEX_NAME%%MEX_EXT%.pdb"
-set NAME_OBJECT=/Fo
+set COMPFLAGS=-c -Zp8 -I"%MATLAB%\sys\lcc\include" -DMATLAB_MEX_FILE -noregistrylookup
+set OPTIMFLAGS=-DNDEBUG
+set DEBUGFLAGS=-g4
+set NAME_OBJECT=-Fo
+set MW_TARGET_ARCH=win32
+
+rem set COMPILER=lcc
+rem set COMPFLAGS=/c /Zp8 /GR /W3 /EHs /D_CRT_SECURE_NO_DEPRECATE /D_SCL_SECURE_NO_DEPRECATE /D_SECURE_SCL=0 /DMATLAB_MEX_FILE /nologo /MD
+rem set OPTIMFLAGS=/O2 /Oy- /DNDEBUG
+rem set DEBUGFLAGS=/Zi /Fd"%OUTDIR%%MEX_NAME%%MEX_EXT%.pdb"
+rem set NAME_OBJECT=/Fo
 
 rem ********************************************************************
 rem Linker parameters
