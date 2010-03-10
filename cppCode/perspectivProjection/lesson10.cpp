@@ -15,13 +15,7 @@
 #include <stdarg.h>			// Header File For Variable Argument Routines
 #include <functions.h>
 //#include <gl\glaux.h>		// Header File For The Glaux Library
-#include <sys/types.h>
-#include <dirent.h>
-#include <errno.h>
-#include <string.h>
-#include <stdlib.h>
-#include <strsafe.h>
-#include <malloc.h>
+
 
 #define BUFSIZE MAX_PATH
 
@@ -487,71 +481,6 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 
 	return TRUE;										// Initialization Went OK
 }
-int checkDirectory(int argc, char *argv[])
-{
-   WIN32_FIND_DATA FindFileData;
-   HANDLE hFind = INVALID_HANDLE_VALUE;
-   DWORD dwError;
-   LPSTR DirSpec;
-   size_t length_of_arg;
-
-
-   DirSpec = (LPSTR) malloc (BUFSIZE);
-   
-   // Check for command-line parameter; otherwise, print usage.
-   if(argc != 2)
-   {
-      printf("Usage: Test <dir>\n");
-      return 2;
-   }
-
-   // Check that the input is not larger than allowed.
-   StringCbLength(argv[1], BUFSIZE, &length_of_arg);
-   if (length_of_arg > (BUFSIZE - 2))
-   {
-      printf("Input directory is too large.\n");
-      return 3;
-   }
-
-   printf ("Target directory is %s.\n", argv[1]);
-
-   // Prepare string for use with FindFile functions.  First, 
-   // copy the string to a buffer, then append '\*' to the 
-   // directory name.
-   StringCbCopyN (DirSpec, BUFSIZE, argv[1], length_of_arg+1);
-   StringCbCatN (DirSpec, BUFSIZE, "\\*", 3);
-
-   // Find the first file in the directory.
-   hFind = FindFirstFile(DirSpec, &FindFileData);
-
-   if (hFind == INVALID_HANDLE_VALUE) 
-   {
-      printf ("Invalid file handle. Error is %u.\n", GetLastError());
-      return (-1);
-   } 
-   else 
-   {
-      printf ("First file name is %s.\n", FindFileData.cFileName);
-      
-						// List all the other files in the directory.
-      while (FindNextFile(hFind, &FindFileData) != 0) 
-      {
-         printf ("Next file name is %s.\n", FindFileData.cFileName);
-      }
-    
-      dwError = GetLastError();
-      FindClose(hFind);
-      if (dwError != ERROR_NO_MORE_FILES) 
-      {
-         printf ("FindNextFile error. Error is %u.\n", dwError);
-         return (-1);
-      }
-   }
-
-   free(DirSpec);
-   return (0);
-}
-
 
 int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 {

@@ -219,6 +219,7 @@
 					>
 					<Tool
 						Name="VCCLCompilerTool"
+						AdditionalIncludeDirectories="C:\PhdStorageCodes\cppCode\perspectivProjection"
 						PreprocessorDefinitions=""
 					/>
 				</FileConfiguration>
