@@ -41,7 +41,7 @@ GLfloat lookupdown = 0.0f;
 GLfloat	z=0.0f;				// Depth Into The Screen
 
 GLuint	filter;				// Which Filter To Use
-GLuint	texture[8];			// Storage For 3 Textures
+GLuint	texture[10];			// Storage For 11 Textures
 GLuint	base;				// Base Display List For The Font Set
 GLfloat	cnt1;				// 1st Counter Used To Move Text & For Coloring
 GLfloat	cnt2;				// 2nd Counter Used To Move Text & For Coloring
@@ -63,16 +63,10 @@ typedef struct tagSECTOR
 	int numtriangles;
 	TRIANGLE* triangle;
 } SECTOR;
+//Find out how many sector needs to be created base on the txt files in the directory
 
-SECTOR sector1;				// Our Model Goes Here:
-SECTOR sector2;
-SECTOR sector3;
-SECTOR sector4;
-SECTOR sector5;
-SECTOR sector6;
-SECTOR sector7;
-SECTOR sector8;
-SECTOR sector9;
+			
+SECTOR sector[12]; // Our Model Goes Here:
 
 LRESULT	CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);	// Declaration For WndProc
 
@@ -91,211 +85,257 @@ void SetupWorld()
 	int numtriangles;
 	FILE *filein;
 	char oneline[255];
-	filein = fopen("data/1.txt", "rt");				// File To Load World Data From
+	filein = fopen("data/20100301T152407.txt", "rt");				// File To Load World Data From
 
 	readstr(filein,oneline);
 	sscanf(oneline, "NUMPOLLIES %d\n", &numtriangles);
 
-	sector1.triangle = new TRIANGLE[numtriangles];
-	sector1.numtriangles = numtriangles;
+	sector[1].triangle = new TRIANGLE[numtriangles];
+	sector[1].numtriangles = numtriangles;
 	for (int loop = 0; loop < numtriangles; loop++)
 	{
 		for (int vert = 0; vert < 3; vert++)
 		{
 			readstr(filein,oneline);
 			sscanf(oneline, "%f %f %f %f %f", &x, &z, &y, &v, &u); // Conversion Z axis = Y axis, image coordinates has to be rotated 90 degrees anti clockwise
-			sector1.triangle[loop].vertex[vert].x = -x;
-			sector1.triangle[loop].vertex[vert].y = y;
-			sector1.triangle[loop].vertex[vert].z = z;
-			sector1.triangle[loop].vertex[vert].u = u;
-			sector1.triangle[loop].vertex[vert].v = 1-v;
+			sector[1].triangle[loop].vertex[vert].x = -x;
+			sector[1].triangle[loop].vertex[vert].y = y;
+			sector[1].triangle[loop].vertex[vert].z = z;
+			sector[1].triangle[loop].vertex[vert].u = u;
+			sector[1].triangle[loop].vertex[vert].v = 1-v;
 		}
 	}
 	fclose(filein);
 
 	//////////////////////////////////
-	filein = fopen("data/2.txt", "rt");				// File To Load World Data From
+	filein = fopen("data/20100301T152428.txt", "rt");				// File To Load World Data From
 
 	readstr(filein,oneline);
 	sscanf(oneline, "NUMPOLLIES %d\n", &numtriangles);
 
-	sector2.triangle = new TRIANGLE[numtriangles];
-	sector2.numtriangles = numtriangles;
+	sector[2].triangle = new TRIANGLE[numtriangles];
+	sector[2].numtriangles = numtriangles;
 	for (int loop = 0; loop < numtriangles; loop++)
 	{
 		for (int vert = 0; vert < 3; vert++)
 		{
 			readstr(filein,oneline);
 			sscanf(oneline, "%f %f %f %f %f", &x, &z, &y, &v, &u);
-			sector2.triangle[loop].vertex[vert].x = -x;
-			sector2.triangle[loop].vertex[vert].y = y;
-			sector2.triangle[loop].vertex[vert].z = z;
-			sector2.triangle[loop].vertex[vert].u = u;
-			sector2.triangle[loop].vertex[vert].v = 1-v;
+			sector[2].triangle[loop].vertex[vert].x = -x;
+			sector[2].triangle[loop].vertex[vert].y = y;
+			sector[2].triangle[loop].vertex[vert].z = z;
+			sector[2].triangle[loop].vertex[vert].u = u;
+			sector[2].triangle[loop].vertex[vert].v = 1-v;
 		}
 	}
 	fclose(filein);
 	////////////////////////////////////////////
-		filein = fopen("data/3.txt", "rt");				// File To Load World Data From
+		filein = fopen("data/20100301T152433.txt", "rt");				// File To Load World Data From
 
 	readstr(filein,oneline);
 	sscanf(oneline, "NUMPOLLIES %d\n", &numtriangles);
 
-	sector3.triangle = new TRIANGLE[numtriangles];
-	sector3.numtriangles = numtriangles;
+	sector[3].triangle = new TRIANGLE[numtriangles];
+	sector[3].numtriangles = numtriangles;
 	for (int loop = 0; loop < numtriangles; loop++)
 	{
 		for (int vert = 0; vert < 3; vert++)
 		{
 			readstr(filein,oneline);
 			sscanf(oneline, "%f %f %f %f %f", &x, &z, &y, &v, &u);
-			sector3.triangle[loop].vertex[vert].x = -x;
-			sector3.triangle[loop].vertex[vert].y = y;
-			sector3.triangle[loop].vertex[vert].z = z;
-			sector3.triangle[loop].vertex[vert].u = u;
-			sector3.triangle[loop].vertex[vert].v = 1-v;
+			sector[3].triangle[loop].vertex[vert].x = -x;
+			sector[3].triangle[loop].vertex[vert].y = y;
+			sector[3].triangle[loop].vertex[vert].z = z;
+			sector[3].triangle[loop].vertex[vert].u = u;
+			sector[3].triangle[loop].vertex[vert].v = 1-v;
 		}
 	}
 	fclose(filein);
 	/////////////////////////////////////////
 	////////////////////////////////////////////
-		filein = fopen("data/4.txt", "rt");				// File To Load World Data From
+		filein = fopen("data/20100301T152448.txt", "rt");				// File To Load World Data From
 
 	readstr(filein,oneline);
 	sscanf(oneline, "NUMPOLLIES %d\n", &numtriangles);
 
-	sector4.triangle = new TRIANGLE[numtriangles];
-	sector4.numtriangles = numtriangles;
+	sector[4].triangle = new TRIANGLE[numtriangles];
+	sector[4].numtriangles = numtriangles;
 	for (int loop = 0; loop < numtriangles; loop++)
 	{
 		for (int vert = 0; vert < 3; vert++)
 		{
 			readstr(filein,oneline);
 			sscanf(oneline, "%f %f %f %f %f", &x, &z, &y, &v, &u);
-			sector4.triangle[loop].vertex[vert].x = -x;
-			sector4.triangle[loop].vertex[vert].y = y;
-			sector4.triangle[loop].vertex[vert].z = z;
-			sector4.triangle[loop].vertex[vert].u = u;
-			sector4.triangle[loop].vertex[vert].v = 1-v;
+			sector[4].triangle[loop].vertex[vert].x = -x;
+			sector[4].triangle[loop].vertex[vert].y = y;
+			sector[4].triangle[loop].vertex[vert].z = z;
+			sector[4].triangle[loop].vertex[vert].u = u;
+			sector[4].triangle[loop].vertex[vert].v = 1-v;
 		}
 	}
 	fclose(filein);
 	/////////////////////////////////////////
 	////////////////////////////////////////////
-		filein = fopen("data/5.txt", "rt");				// File To Load World Data From
+		filein = fopen("data/20100301T152510.txt", "rt");				// File To Load World Data From
 
 	readstr(filein,oneline);
 	sscanf(oneline, "NUMPOLLIES %d\n", &numtriangles);
 
-	sector5.triangle = new TRIANGLE[numtriangles];
-	sector5.numtriangles = numtriangles;
+	sector[5].triangle = new TRIANGLE[numtriangles];
+	sector[5].numtriangles = numtriangles;
 	for (int loop = 0; loop < numtriangles; loop++)
 	{
 		for (int vert = 0; vert < 3; vert++)
 		{
 			readstr(filein,oneline);
 			sscanf(oneline, "%f %f %f %f %f", &x, &z, &y, &v, &u);
-			sector5.triangle[loop].vertex[vert].x = -x;
-			sector5.triangle[loop].vertex[vert].y = y;
-			sector5.triangle[loop].vertex[vert].z = z;
-			sector5.triangle[loop].vertex[vert].u = u;
-			sector5.triangle[loop].vertex[vert].v = 1-v;
+			sector[5].triangle[loop].vertex[vert].x = -x;
+			sector[5].triangle[loop].vertex[vert].y = y;
+			sector[5].triangle[loop].vertex[vert].z = z;
+			sector[5].triangle[loop].vertex[vert].u = u;
+			sector[5].triangle[loop].vertex[vert].v = 1-v;
 		}
 	}
 	fclose(filein);
 	/////////////////////////////////////////
 	////////////////////////////////////////////
-		filein = fopen("data/6.txt", "rt");				// File To Load World Data From
+		filein = fopen("data/20100301T152515.txt", "rt");				// File To Load World Data From
 
 	readstr(filein,oneline);
 	sscanf(oneline, "NUMPOLLIES %d\n", &numtriangles);
 
-	sector6.triangle = new TRIANGLE[numtriangles];
-	sector6.numtriangles = numtriangles;
+	sector[6].triangle = new TRIANGLE[numtriangles];
+	sector[6].numtriangles = numtriangles;
 	for (int loop = 0; loop < numtriangles; loop++)
 	{
 		for (int vert = 0; vert < 3; vert++)
 		{
 			readstr(filein,oneline);
 			sscanf(oneline, "%f %f %f %f %f", &x, &z, &y, &v, &u);
-			sector6.triangle[loop].vertex[vert].x = -x;
-			sector6.triangle[loop].vertex[vert].y = y;
-			sector6.triangle[loop].vertex[vert].z = z;
-			sector6.triangle[loop].vertex[vert].u = u;
-			sector6.triangle[loop].vertex[vert].v = 1-v;
+			sector[6].triangle[loop].vertex[vert].x = -x;
+			sector[6].triangle[loop].vertex[vert].y = y;
+			sector[6].triangle[loop].vertex[vert].z = z;
+			sector[6].triangle[loop].vertex[vert].u = u;
+			sector[6].triangle[loop].vertex[vert].v = 1-v;
 		}
 	}
 	fclose(filein);
 	/////////////////////////////////////////
 	////////////////////////////////////////////
-		filein = fopen("data/7.txt", "rt");				// File To Load World Data From
+		filein = fopen("data/20100301T152531.txt", "rt");				// File To Load World Data From
 
 	readstr(filein,oneline);
 	sscanf(oneline, "NUMPOLLIES %d\n", &numtriangles);
 
-	sector7.triangle = new TRIANGLE[numtriangles];
-	sector7.numtriangles = numtriangles;
+	sector[7].triangle = new TRIANGLE[numtriangles];
+	sector[7].numtriangles = numtriangles;
 	for (int loop = 0; loop < numtriangles; loop++)
 	{
 		for (int vert = 0; vert < 3; vert++)
 		{
 			readstr(filein,oneline);
 			sscanf(oneline, "%f %f %f %f %f", &x, &z, &y, &v, &u);
-			sector7.triangle[loop].vertex[vert].x = -x;
-			sector7.triangle[loop].vertex[vert].y = y;
-			sector7.triangle[loop].vertex[vert].z = z;
-			sector7.triangle[loop].vertex[vert].u = u;
-			sector7.triangle[loop].vertex[vert].v = 1-v;
+			sector[7].triangle[loop].vertex[vert].x = -x;
+			sector[7].triangle[loop].vertex[vert].y = y;
+			sector[7].triangle[loop].vertex[vert].z = z;
+			sector[7].triangle[loop].vertex[vert].u = u;
+			sector[7].triangle[loop].vertex[vert].v = 1-v;
 		}
 	}
 	fclose(filein);
 	/////////////////////////////////////////
 	////////////////////////////////////////////
-		filein = fopen("data/8.txt", "rt");				// File To Load World Data From
+		filein = fopen("data/20100301T152554.txt", "rt");				// File To Load World Data From
 
 	readstr(filein,oneline);
 	sscanf(oneline, "NUMPOLLIES %d\n", &numtriangles);
 
-	sector8.triangle = new TRIANGLE[numtriangles];
-	sector8.numtriangles = numtriangles;
+	sector[8].triangle = new TRIANGLE[numtriangles];
+	sector[8].numtriangles = numtriangles;
 	for (int loop = 0; loop < numtriangles; loop++)
 	{
 		for (int vert = 0; vert < 3; vert++)
 		{
 			readstr(filein,oneline);
 			sscanf(oneline, "%f %f %f %f %f", &x, &z, &y, &v, &u);
-			sector8.triangle[loop].vertex[vert].x = -x;
-			sector8.triangle[loop].vertex[vert].y = y;
-			sector8.triangle[loop].vertex[vert].z = z;
-			sector8.triangle[loop].vertex[vert].u = u;
-			sector8.triangle[loop].vertex[vert].v = 1-v;
+			sector[8].triangle[loop].vertex[vert].x = -x;
+			sector[8].triangle[loop].vertex[vert].y = y;
+			sector[8].triangle[loop].vertex[vert].z = z;
+			sector[8].triangle[loop].vertex[vert].u = u;
+			sector[8].triangle[loop].vertex[vert].v = 1-v;
 		}
 	}
 	fclose(filein);
 	/////////////////////////////////////////
 	////////////////////////////////////////////
-		filein = fopen("data/9.txt", "rt");				// File To Load World Data From
+		filein = fopen("data/20100301T152616.txt", "rt");				// File To Load World Data From
 
 	readstr(filein,oneline);
 	sscanf(oneline, "NUMPOLLIES %d\n", &numtriangles);
 
-	sector9.triangle = new TRIANGLE[numtriangles];
-	sector9.numtriangles = numtriangles;
+	sector[9].triangle = new TRIANGLE[numtriangles];
+	sector[9].numtriangles = numtriangles;
 	for (int loop = 0; loop < numtriangles; loop++)
 	{
 		for (int vert = 0; vert < 3; vert++)
 		{
 			readstr(filein,oneline);
 			sscanf(oneline, "%f %f %f %f %f", &x, &z, &y, &v, &u);
-			sector9.triangle[loop].vertex[vert].x = -x;
-			sector9.triangle[loop].vertex[vert].y = y;
-			sector9.triangle[loop].vertex[vert].z = z;
-			sector9.triangle[loop].vertex[vert].u = u;
-			sector9.triangle[loop].vertex[vert].v = 1-v;
+			sector[9].triangle[loop].vertex[vert].x = -x;
+			sector[9].triangle[loop].vertex[vert].y = y;
+			sector[9].triangle[loop].vertex[vert].z = z;
+			sector[9].triangle[loop].vertex[vert].u = u;
+			sector[9].triangle[loop].vertex[vert].v = 1-v;
 		}
 	}
 	fclose(filein);
-	/////////////////////////////////////////
+	///////////////////////////////////////
+		////////////////////////////////////////////
+		filein = fopen("data/20100301T152642.txt", "rt");				// File To Load World Data From
+
+	readstr(filein,oneline);
+	sscanf(oneline, "NUMPOLLIES %d\n", &numtriangles);
+
+	sector[10].triangle = new TRIANGLE[numtriangles];
+	sector[10].numtriangles = numtriangles;
+	for (int loop = 0; loop < numtriangles; loop++)
+	{
+		for (int vert = 0; vert < 3; vert++)
+		{
+			readstr(filein,oneline);
+			sscanf(oneline, "%f %f %f %f %f", &x, &z, &y, &v, &u);
+			sector[10].triangle[loop].vertex[vert].x = -x;
+			sector[10].triangle[loop].vertex[vert].y = y;
+			sector[10].triangle[loop].vertex[vert].z = z;
+			sector[10].triangle[loop].vertex[vert].u = u;
+			sector[10].triangle[loop].vertex[vert].v = 1-v;
+		}
+	}
+	fclose(filein);
+	///////////////////////////////////////
+		////////////////////////////////////////////
+		filein = fopen("data/20100301T152657.txt", "rt");				// File To Load World Data From
+
+	readstr(filein,oneline);
+	sscanf(oneline, "NUMPOLLIES %d\n", &numtriangles);
+
+	sector[11].triangle = new TRIANGLE[numtriangles];
+	sector[11].numtriangles = numtriangles;
+	for (int loop = 0; loop < numtriangles; loop++)
+	{
+		for (int vert = 0; vert < 3; vert++)
+		{
+			readstr(filein,oneline);
+			sscanf(oneline, "%f %f %f %f %f", &x, &z, &y, &v, &u);
+			sector[11].triangle[loop].vertex[vert].x = -x;
+			sector[11].triangle[loop].vertex[vert].y = y;
+			sector[11].triangle[loop].vertex[vert].z = z;
+			sector[11].triangle[loop].vertex[vert].u = u;
+			sector[11].triangle[loop].vertex[vert].v = 1-v;
+		}
+	}
+	fclose(filein);
+	///////////////////////////////////////
 
 	return;
 }
@@ -372,23 +412,27 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 	//{
 	//	return FALSE;									// If Texture Didn't Load Return FALSE
 	//}
-	if (!NeHeLoadBitmap("Data/1.bmp", texture[0]))					// Load The Bitmap
+	if (!NeHeLoadBitmap("Data/20100301T152407.bmp", texture[0]))					// Load The Bitmap
 		return FALSE;
-	if (!NeHeLoadBitmap("Data/2.bmp", texture[1]))					// Load The Bitmap
+	if (!NeHeLoadBitmap("Data/20100301T152428.bmp", texture[1]))					// Load The Bitmap
 		return FALSE;
-	if (!NeHeLoadBitmap("Data/3.bmp", texture[2]))					// Load The Bitmap
+	if (!NeHeLoadBitmap("Data/20100301T152433.bmp", texture[2]))					// Load The Bitmap
 		return FALSE;
-	if (!NeHeLoadBitmap("Data/4.bmp", texture[3]))					// Load The Bitmap
+	if (!NeHeLoadBitmap("Data/20100301T152448.bmp", texture[3]))					// Load The Bitmap
 		return FALSE;
-	if (!NeHeLoadBitmap("Data/5.bmp", texture[4]))					// Load The Bitmap
+	if (!NeHeLoadBitmap("Data/20100301T152510.bmp", texture[4]))					// Load The Bitmap
 		return FALSE;
-	if (!NeHeLoadBitmap("Data/6.bmp", texture[5]))					// Load The Bitmap
+	if (!NeHeLoadBitmap("Data/20100301T152515.bmp", texture[5]))					// Load The Bitmap
 		return FALSE;
-	if (!NeHeLoadBitmap("Data/7.bmp", texture[6]))					// Load The Bitmap
+	if (!NeHeLoadBitmap("Data/20100301T152531.bmp", texture[6]))					// Load The Bitmap
 		return FALSE;
-	if (!NeHeLoadBitmap("Data/8.bmp", texture[7]))					// Load The Bitmap
+	if (!NeHeLoadBitmap("Data/20100301T152554.bmp", texture[7]))					// Load The Bitmap
 		return FALSE;
-	if (!NeHeLoadBitmap("Data/9.bmp", texture[8]))					// Load The Bitmap
+	if (!NeHeLoadBitmap("Data/20100301T152616.bmp", texture[8]))					// Load The Bitmap
+		return FALSE;
+	if (!NeHeLoadBitmap("Data/20100301T152642.bmp", texture[9]))					// Load The Bitmap
+		return FALSE;
+	if (!NeHeLoadBitmap("Data/20100301T152657.bmp", texture[10]))					// Load The Bitmap
 		return FALSE;
 
 
@@ -448,7 +492,7 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 	
 
 	
-	numtriangles = sector1.numtriangles;
+	numtriangles = sector[1].numtriangles;
 	//numtriangles = 1;
 	
 	// Process Each Triangle
@@ -456,32 +500,32 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 	{
 		glBegin(GL_TRIANGLES);
 			glNormal3f( 0.0f, 0.0f, 1.0f);
-			x_m = sector1.triangle[loop_m].vertex[0].x;
-			y_m = sector1.triangle[loop_m].vertex[0].y;
-			z_m = sector1.triangle[loop_m].vertex[0].z;
-			u_m = sector1.triangle[loop_m].vertex[0].u;
-			v_m = sector1.triangle[loop_m].vertex[0].v;
+			x_m = sector[1].triangle[loop_m].vertex[0].x;
+			y_m = sector[1].triangle[loop_m].vertex[0].y;
+			z_m = sector[1].triangle[loop_m].vertex[0].z;
+			u_m = sector[1].triangle[loop_m].vertex[0].u;
+			v_m = sector[1].triangle[loop_m].vertex[0].v;
 			glTexCoord2f(u_m,v_m); glVertex3f(x_m,y_m,z_m);
 			
-			x_m = sector1.triangle[loop_m].vertex[1].x;
-			y_m = sector1.triangle[loop_m].vertex[1].y;
-			z_m = sector1.triangle[loop_m].vertex[1].z;
-			u_m = sector1.triangle[loop_m].vertex[1].u;
-			v_m = sector1.triangle[loop_m].vertex[1].v;
+			x_m = sector[1].triangle[loop_m].vertex[1].x;
+			y_m = sector[1].triangle[loop_m].vertex[1].y;
+			z_m = sector[1].triangle[loop_m].vertex[1].z;
+			u_m = sector[1].triangle[loop_m].vertex[1].u;
+			v_m = sector[1].triangle[loop_m].vertex[1].v;
 			glTexCoord2f(u_m,v_m); glVertex3f(x_m,y_m,z_m);
 			
-			x_m = sector1.triangle[loop_m].vertex[2].x;
-			y_m = sector1.triangle[loop_m].vertex[2].y;
-			z_m = sector1.triangle[loop_m].vertex[2].z;
-			u_m = sector1.triangle[loop_m].vertex[2].u;
-			v_m = sector1.triangle[loop_m].vertex[2].v;
+			x_m = sector[1].triangle[loop_m].vertex[2].x;
+			y_m = sector[1].triangle[loop_m].vertex[2].y;
+			z_m = sector[1].triangle[loop_m].vertex[2].z;
+			u_m = sector[1].triangle[loop_m].vertex[2].u;
+			v_m = sector[1].triangle[loop_m].vertex[2].v;
 			glTexCoord2f(u_m,v_m); glVertex3f(x_m,y_m,z_m);
 		glEnd();
 	}
 	////////////////////////////////////////////
 	glBindTexture(GL_TEXTURE_2D, texture[1]);
 	
-	numtriangles = sector2.numtriangles;
+	numtriangles = sector[2].numtriangles;
 	//numtriangles = 1;
 	
 	// Process Each Triangle
@@ -489,32 +533,32 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 	{
 		glBegin(GL_TRIANGLES);
 			glNormal3f( 0.0f, 0.0f, 1.0f);
-			x_m = sector2.triangle[loop_m].vertex[0].x;
-			y_m = sector2.triangle[loop_m].vertex[0].y;
-			z_m = sector2.triangle[loop_m].vertex[0].z;
-			u_m = sector2.triangle[loop_m].vertex[0].u;
-			v_m = sector2.triangle[loop_m].vertex[0].v;
+			x_m = sector[2].triangle[loop_m].vertex[0].x;
+			y_m = sector[2].triangle[loop_m].vertex[0].y;
+			z_m = sector[2].triangle[loop_m].vertex[0].z;
+			u_m = sector[2].triangle[loop_m].vertex[0].u;
+			v_m = sector[2].triangle[loop_m].vertex[0].v;
 			glTexCoord2f(u_m,v_m); glVertex3f(x_m,y_m,z_m);
 			
-			x_m = sector2.triangle[loop_m].vertex[1].x;
-			y_m = sector2.triangle[loop_m].vertex[1].y;
-			z_m = sector2.triangle[loop_m].vertex[1].z;
-			u_m = sector2.triangle[loop_m].vertex[1].u;
-			v_m = sector2.triangle[loop_m].vertex[1].v;
+			x_m = sector[2].triangle[loop_m].vertex[1].x;
+			y_m = sector[2].triangle[loop_m].vertex[1].y;
+			z_m = sector[2].triangle[loop_m].vertex[1].z;
+			u_m = sector[2].triangle[loop_m].vertex[1].u;
+			v_m = sector[2].triangle[loop_m].vertex[1].v;
 			glTexCoord2f(u_m,v_m); glVertex3f(x_m,y_m,z_m);
 			
-			x_m = sector2.triangle[loop_m].vertex[2].x;
-			y_m = sector2.triangle[loop_m].vertex[2].y;
-			z_m = sector2.triangle[loop_m].vertex[2].z;
-			u_m = sector2.triangle[loop_m].vertex[2].u;
-			v_m = sector2.triangle[loop_m].vertex[2].v;
+			x_m = sector[2].triangle[loop_m].vertex[2].x;
+			y_m = sector[2].triangle[loop_m].vertex[2].y;
+			z_m = sector[2].triangle[loop_m].vertex[2].z;
+			u_m = sector[2].triangle[loop_m].vertex[2].u;
+			v_m = sector[2].triangle[loop_m].vertex[2].v;
 			glTexCoord2f(u_m,v_m); glVertex3f(x_m,y_m,z_m);
 		glEnd();
 	}
 	/////////////////////////////////////////////////////
 		glBindTexture(GL_TEXTURE_2D, texture[2]);
 	
-	numtriangles = sector3.numtriangles;
+	numtriangles = sector[3].numtriangles;
 	//numtriangles = 1;
 	
 	// Process Each Triangle
@@ -522,32 +566,32 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 	{
 		glBegin(GL_TRIANGLES);
 			glNormal3f( 0.0f, 0.0f, 1.0f);
-			x_m = sector3.triangle[loop_m].vertex[0].x;
-			y_m = sector3.triangle[loop_m].vertex[0].y;
-			z_m = sector3.triangle[loop_m].vertex[0].z;
-			u_m = sector3.triangle[loop_m].vertex[0].u;
-			v_m = sector3.triangle[loop_m].vertex[0].v;
+			x_m = sector[3].triangle[loop_m].vertex[0].x;
+			y_m = sector[3].triangle[loop_m].vertex[0].y;
+			z_m = sector[3].triangle[loop_m].vertex[0].z;
+			u_m = sector[3].triangle[loop_m].vertex[0].u;
+			v_m = sector[3].triangle[loop_m].vertex[0].v;
 			glTexCoord2f(u_m,v_m); glVertex3f(x_m,y_m,z_m);
 			
-			x_m = sector3.triangle[loop_m].vertex[1].x;
-			y_m = sector3.triangle[loop_m].vertex[1].y;
-			z_m = sector3.triangle[loop_m].vertex[1].z;
-			u_m = sector3.triangle[loop_m].vertex[1].u;
-			v_m = sector3.triangle[loop_m].vertex[1].v;
+			x_m = sector[3].triangle[loop_m].vertex[1].x;
+			y_m = sector[3].triangle[loop_m].vertex[1].y;
+			z_m = sector[3].triangle[loop_m].vertex[1].z;
+			u_m = sector[3].triangle[loop_m].vertex[1].u;
+			v_m = sector[3].triangle[loop_m].vertex[1].v;
 			glTexCoord2f(u_m,v_m); glVertex3f(x_m,y_m,z_m);
 			
-			x_m = sector3.triangle[loop_m].vertex[2].x;
-			y_m = sector3.triangle[loop_m].vertex[2].y;
-			z_m = sector3.triangle[loop_m].vertex[2].z;
-			u_m = sector3.triangle[loop_m].vertex[2].u;
-			v_m = sector3.triangle[loop_m].vertex[2].v;
+			x_m = sector[3].triangle[loop_m].vertex[2].x;
+			y_m = sector[3].triangle[loop_m].vertex[2].y;
+			z_m = sector[3].triangle[loop_m].vertex[2].z;
+			u_m = sector[3].triangle[loop_m].vertex[2].u;
+			v_m = sector[3].triangle[loop_m].vertex[2].v;
 			glTexCoord2f(u_m,v_m); glVertex3f(x_m,y_m,z_m);
 		glEnd();
 	}
 	/////////////////////////////////////////////////////
-		glBindTexture(GL_TEXTURE_2D, texture[2]);
+		glBindTexture(GL_TEXTURE_2D, texture[3]);
 	
-	numtriangles = sector4.numtriangles;
+	numtriangles = sector[4].numtriangles;
 	//numtriangles = 1;
 	
 	// Process Each Triangle
@@ -555,32 +599,32 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 	{
 		glBegin(GL_TRIANGLES);
 			glNormal3f( 0.0f, 0.0f, 1.0f);
-			x_m = sector4.triangle[loop_m].vertex[0].x;
-			y_m = sector4.triangle[loop_m].vertex[0].y;
-			z_m = sector4.triangle[loop_m].vertex[0].z;
-			u_m = sector4.triangle[loop_m].vertex[0].u;
-			v_m = sector4.triangle[loop_m].vertex[0].v;
+			x_m = sector[4].triangle[loop_m].vertex[0].x;
+			y_m = sector[4].triangle[loop_m].vertex[0].y;
+			z_m = sector[4].triangle[loop_m].vertex[0].z;
+			u_m = sector[4].triangle[loop_m].vertex[0].u;
+			v_m = sector[4].triangle[loop_m].vertex[0].v;
 			glTexCoord2f(u_m,v_m); glVertex3f(x_m,y_m,z_m);
 			
-			x_m = sector4.triangle[loop_m].vertex[1].x;
-			y_m = sector4.triangle[loop_m].vertex[1].y;
-			z_m = sector4.triangle[loop_m].vertex[1].z;
-			u_m = sector4.triangle[loop_m].vertex[1].u;
-			v_m = sector4.triangle[loop_m].vertex[1].v;
+			x_m = sector[4].triangle[loop_m].vertex[1].x;
+			y_m = sector[4].triangle[loop_m].vertex[1].y;
+			z_m = sector[4].triangle[loop_m].vertex[1].z;
+			u_m = sector[4].triangle[loop_m].vertex[1].u;
+			v_m = sector[4].triangle[loop_m].vertex[1].v;
 			glTexCoord2f(u_m,v_m); glVertex3f(x_m,y_m,z_m);
 			
-			x_m = sector4.triangle[loop_m].vertex[2].x;
-			y_m = sector4.triangle[loop_m].vertex[2].y;
-			z_m = sector4.triangle[loop_m].vertex[2].z;
-			u_m = sector4.triangle[loop_m].vertex[2].u;
-			v_m = sector4.triangle[loop_m].vertex[2].v;
+			x_m = sector[4].triangle[loop_m].vertex[2].x;
+			y_m = sector[4].triangle[loop_m].vertex[2].y;
+			z_m = sector[4].triangle[loop_m].vertex[2].z;
+			u_m = sector[4].triangle[loop_m].vertex[2].u;
+			v_m = sector[4].triangle[loop_m].vertex[2].v;
 			glTexCoord2f(u_m,v_m); glVertex3f(x_m,y_m,z_m);
 		glEnd();
 	}
 	/////////////////////////////////////////////////////
-		glBindTexture(GL_TEXTURE_2D, texture[2]);
+		glBindTexture(GL_TEXTURE_2D, texture[4]);
 	
-	numtriangles = sector5.numtriangles;
+	numtriangles = sector[5].numtriangles;
 	//numtriangles = 1;
 	
 	// Process Each Triangle
@@ -588,32 +632,32 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 	{
 		glBegin(GL_TRIANGLES);
 			glNormal3f( 0.0f, 0.0f, 1.0f);
-			x_m = sector5.triangle[loop_m].vertex[0].x;
-			y_m = sector5.triangle[loop_m].vertex[0].y;
-			z_m = sector5.triangle[loop_m].vertex[0].z;
-			u_m = sector5.triangle[loop_m].vertex[0].u;
-			v_m = sector5.triangle[loop_m].vertex[0].v;
+			x_m = sector[5].triangle[loop_m].vertex[0].x;
+			y_m = sector[5].triangle[loop_m].vertex[0].y;
+			z_m = sector[5].triangle[loop_m].vertex[0].z;
+			u_m = sector[5].triangle[loop_m].vertex[0].u;
+			v_m = sector[5].triangle[loop_m].vertex[0].v;
 			glTexCoord2f(u_m,v_m); glVertex3f(x_m,y_m,z_m);
 			
-			x_m = sector5.triangle[loop_m].vertex[1].x;
-			y_m = sector5.triangle[loop_m].vertex[1].y;
-			z_m = sector5.triangle[loop_m].vertex[1].z;
-			u_m = sector5.triangle[loop_m].vertex[1].u;
-			v_m = sector5.triangle[loop_m].vertex[1].v;
+			x_m = sector[5].triangle[loop_m].vertex[1].x;
+			y_m = sector[5].triangle[loop_m].vertex[1].y;
+			z_m = sector[5].triangle[loop_m].vertex[1].z;
+			u_m = sector[5].triangle[loop_m].vertex[1].u;
+			v_m = sector[5].triangle[loop_m].vertex[1].v;
 			glTexCoord2f(u_m,v_m); glVertex3f(x_m,y_m,z_m);
 			
-			x_m = sector5.triangle[loop_m].vertex[2].x;
-			y_m = sector5.triangle[loop_m].vertex[2].y;
-			z_m = sector5.triangle[loop_m].vertex[2].z;
-			u_m = sector5.triangle[loop_m].vertex[2].u;
-			v_m = sector5.triangle[loop_m].vertex[2].v;
+			x_m = sector[5].triangle[loop_m].vertex[2].x;
+			y_m = sector[5].triangle[loop_m].vertex[2].y;
+			z_m = sector[5].triangle[loop_m].vertex[2].z;
+			u_m = sector[5].triangle[loop_m].vertex[2].u;
+			v_m = sector[5].triangle[loop_m].vertex[2].v;
 			glTexCoord2f(u_m,v_m); glVertex3f(x_m,y_m,z_m);
 		glEnd();
 	}
 	/////////////////////////////////////////////////////
-		glBindTexture(GL_TEXTURE_2D, texture[2]);
+		glBindTexture(GL_TEXTURE_2D, texture[5]);
 	
-	numtriangles = sector6.numtriangles;
+	numtriangles = sector[6].numtriangles;
 	//numtriangles = 1;
 	
 	// Process Each Triangle
@@ -621,32 +665,32 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 	{
 		glBegin(GL_TRIANGLES);
 			glNormal3f( 0.0f, 0.0f, 1.0f);
-			x_m = sector6.triangle[loop_m].vertex[0].x;
-			y_m = sector6.triangle[loop_m].vertex[0].y;
-			z_m = sector6.triangle[loop_m].vertex[0].z;
-			u_m = sector6.triangle[loop_m].vertex[0].u;
-			v_m = sector6.triangle[loop_m].vertex[0].v;
+			x_m = sector[6].triangle[loop_m].vertex[0].x;
+			y_m = sector[6].triangle[loop_m].vertex[0].y;
+			z_m = sector[6].triangle[loop_m].vertex[0].z;
+			u_m = sector[6].triangle[loop_m].vertex[0].u;
+			v_m = sector[6].triangle[loop_m].vertex[0].v;
 			glTexCoord2f(u_m,v_m); glVertex3f(x_m,y_m,z_m);
 			
-			x_m = sector6.triangle[loop_m].vertex[1].x;
-			y_m = sector6.triangle[loop_m].vertex[1].y;
-			z_m = sector6.triangle[loop_m].vertex[1].z;
-			u_m = sector6.triangle[loop_m].vertex[1].u;
-			v_m = sector6.triangle[loop_m].vertex[1].v;
+			x_m = sector[6].triangle[loop_m].vertex[1].x;
+			y_m = sector[6].triangle[loop_m].vertex[1].y;
+			z_m = sector[6].triangle[loop_m].vertex[1].z;
+			u_m = sector[6].triangle[loop_m].vertex[1].u;
+			v_m = sector[6].triangle[loop_m].vertex[1].v;
 			glTexCoord2f(u_m,v_m); glVertex3f(x_m,y_m,z_m);
 			
-			x_m = sector6.triangle[loop_m].vertex[2].x;
-			y_m = sector6.triangle[loop_m].vertex[2].y;
-			z_m = sector6.triangle[loop_m].vertex[2].z;
-			u_m = sector6.triangle[loop_m].vertex[2].u;
-			v_m = sector6.triangle[loop_m].vertex[2].v;
+			x_m = sector[6].triangle[loop_m].vertex[2].x;
+			y_m = sector[6].triangle[loop_m].vertex[2].y;
+			z_m = sector[6].triangle[loop_m].vertex[2].z;
+			u_m = sector[6].triangle[loop_m].vertex[2].u;
+			v_m = sector[6].triangle[loop_m].vertex[2].v;
 			glTexCoord2f(u_m,v_m); glVertex3f(x_m,y_m,z_m);
 		glEnd();
 	}
 	/////////////////////////////////////////////////////
-		glBindTexture(GL_TEXTURE_2D, texture[2]);
+		glBindTexture(GL_TEXTURE_2D, texture[6]);
 	
-	numtriangles = sector7.numtriangles;
+	numtriangles = sector[7].numtriangles;
 	//numtriangles = 1;
 	
 	// Process Each Triangle
@@ -654,32 +698,32 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 	{
 		glBegin(GL_TRIANGLES);
 			glNormal3f( 0.0f, 0.0f, 1.0f);
-			x_m = sector7.triangle[loop_m].vertex[0].x;
-			y_m = sector7.triangle[loop_m].vertex[0].y;
-			z_m = sector7.triangle[loop_m].vertex[0].z;
-			u_m = sector7.triangle[loop_m].vertex[0].u;
-			v_m = sector7.triangle[loop_m].vertex[0].v;
+			x_m = sector[7].triangle[loop_m].vertex[0].x;
+			y_m = sector[7].triangle[loop_m].vertex[0].y;
+			z_m = sector[7].triangle[loop_m].vertex[0].z;
+			u_m = sector[7].triangle[loop_m].vertex[0].u;
+			v_m = sector[7].triangle[loop_m].vertex[0].v;
 			glTexCoord2f(u_m,v_m); glVertex3f(x_m,y_m,z_m);
 			
-			x_m = sector7.triangle[loop_m].vertex[1].x;
-			y_m = sector7.triangle[loop_m].vertex[1].y;
-			z_m = sector7.triangle[loop_m].vertex[1].z;
-			u_m = sector7.triangle[loop_m].vertex[1].u;
-			v_m = sector7.triangle[loop_m].vertex[1].v;
+			x_m = sector[7].triangle[loop_m].vertex[1].x;
+			y_m = sector[7].triangle[loop_m].vertex[1].y;
+			z_m = sector[7].triangle[loop_m].vertex[1].z;
+			u_m = sector[7].triangle[loop_m].vertex[1].u;
+			v_m = sector[7].triangle[loop_m].vertex[1].v;
 			glTexCoord2f(u_m,v_m); glVertex3f(x_m,y_m,z_m);
 			
-			x_m = sector7.triangle[loop_m].vertex[2].x;
-			y_m = sector7.triangle[loop_m].vertex[2].y;
-			z_m = sector7.triangle[loop_m].vertex[2].z;
-			u_m = sector7.triangle[loop_m].vertex[2].u;
-			v_m = sector7.triangle[loop_m].vertex[2].v;
+			x_m = sector[7].triangle[loop_m].vertex[2].x;
+			y_m = sector[7].triangle[loop_m].vertex[2].y;
+			z_m = sector[7].triangle[loop_m].vertex[2].z;
+			u_m = sector[7].triangle[loop_m].vertex[2].u;
+			v_m = sector[7].triangle[loop_m].vertex[2].v;
 			glTexCoord2f(u_m,v_m); glVertex3f(x_m,y_m,z_m);
 		glEnd();
 	}
 	/////////////////////////////////////////////////////
-		glBindTexture(GL_TEXTURE_2D, texture[2]);
+		glBindTexture(GL_TEXTURE_2D, texture[7]);
 	
-	numtriangles = sector8.numtriangles;
+	numtriangles = sector[8].numtriangles;
 	//numtriangles = 1;
 	
 	// Process Each Triangle
@@ -687,32 +731,32 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 	{
 		glBegin(GL_TRIANGLES);
 			glNormal3f( 0.0f, 0.0f, 1.0f);
-			x_m = sector8.triangle[loop_m].vertex[0].x;
-			y_m = sector8.triangle[loop_m].vertex[0].y;
-			z_m = sector8.triangle[loop_m].vertex[0].z;
-			u_m = sector8.triangle[loop_m].vertex[0].u;
-			v_m = sector8.triangle[loop_m].vertex[0].v;
+			x_m = sector[8].triangle[loop_m].vertex[0].x;
+			y_m = sector[8].triangle[loop_m].vertex[0].y;
+			z_m = sector[8].triangle[loop_m].vertex[0].z;
+			u_m = sector[8].triangle[loop_m].vertex[0].u;
+			v_m = sector[8].triangle[loop_m].vertex[0].v;
 			glTexCoord2f(u_m,v_m); glVertex3f(x_m,y_m,z_m);
 			
-			x_m = sector8.triangle[loop_m].vertex[1].x;
-			y_m = sector8.triangle[loop_m].vertex[1].y;
-			z_m = sector8.triangle[loop_m].vertex[1].z;
-			u_m = sector8.triangle[loop_m].vertex[1].u;
-			v_m = sector8.triangle[loop_m].vertex[1].v;
+			x_m = sector[8].triangle[loop_m].vertex[1].x;
+			y_m = sector[8].triangle[loop_m].vertex[1].y;
+			z_m = sector[8].triangle[loop_m].vertex[1].z;
+			u_m = sector[8].triangle[loop_m].vertex[1].u;
+			v_m = sector[8].triangle[loop_m].vertex[1].v;
 			glTexCoord2f(u_m,v_m); glVertex3f(x_m,y_m,z_m);
 			
-			x_m = sector8.triangle[loop_m].vertex[2].x;
-			y_m = sector8.triangle[loop_m].vertex[2].y;
-			z_m = sector8.triangle[loop_m].vertex[2].z;
-			u_m = sector8.triangle[loop_m].vertex[2].u;
-			v_m = sector8.triangle[loop_m].vertex[2].v;
+			x_m = sector[8].triangle[loop_m].vertex[2].x;
+			y_m = sector[8].triangle[loop_m].vertex[2].y;
+			z_m = sector[8].triangle[loop_m].vertex[2].z;
+			u_m = sector[8].triangle[loop_m].vertex[2].u;
+			v_m = sector[8].triangle[loop_m].vertex[2].v;
 			glTexCoord2f(u_m,v_m); glVertex3f(x_m,y_m,z_m);
 		glEnd();
 	}
 	/////////////////////////////////////////////////////
-		glBindTexture(GL_TEXTURE_2D, texture[2]);
+		glBindTexture(GL_TEXTURE_2D, texture[8]);
 	
-	numtriangles = sector9.numtriangles;
+	numtriangles = sector[9].numtriangles;
 	//numtriangles = 1;
 	
 	// Process Each Triangle
@@ -720,25 +764,91 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 	{
 		glBegin(GL_TRIANGLES);
 			glNormal3f( 0.0f, 0.0f, 1.0f);
-			x_m = sector9.triangle[loop_m].vertex[0].x;
-			y_m = sector9.triangle[loop_m].vertex[0].y;
-			z_m = sector9.triangle[loop_m].vertex[0].z;
-			u_m = sector9.triangle[loop_m].vertex[0].u;
-			v_m = sector9.triangle[loop_m].vertex[0].v;
+			x_m = sector[9].triangle[loop_m].vertex[0].x;
+			y_m = sector[9].triangle[loop_m].vertex[0].y;
+			z_m = sector[9].triangle[loop_m].vertex[0].z;
+			u_m = sector[9].triangle[loop_m].vertex[0].u;
+			v_m = sector[9].triangle[loop_m].vertex[0].v;
 			glTexCoord2f(u_m,v_m); glVertex3f(x_m,y_m,z_m);
 			
-			x_m = sector9.triangle[loop_m].vertex[1].x;
-			y_m = sector9.triangle[loop_m].vertex[1].y;
-			z_m = sector9.triangle[loop_m].vertex[1].z;
-			u_m = sector9.triangle[loop_m].vertex[1].u;
-			v_m = sector9.triangle[loop_m].vertex[1].v;
+			x_m = sector[9].triangle[loop_m].vertex[1].x;
+			y_m = sector[9].triangle[loop_m].vertex[1].y;
+			z_m = sector[9].triangle[loop_m].vertex[1].z;
+			u_m = sector[9].triangle[loop_m].vertex[1].u;
+			v_m = sector[9].triangle[loop_m].vertex[1].v;
 			glTexCoord2f(u_m,v_m); glVertex3f(x_m,y_m,z_m);
 			
-			x_m = sector9.triangle[loop_m].vertex[2].x;
-			y_m = sector9.triangle[loop_m].vertex[2].y;
-			z_m = sector9.triangle[loop_m].vertex[2].z;
-			u_m = sector9.triangle[loop_m].vertex[2].u;
-			v_m = sector9.triangle[loop_m].vertex[2].v;
+			x_m = sector[9].triangle[loop_m].vertex[2].x;
+			y_m = sector[9].triangle[loop_m].vertex[2].y;
+			z_m = sector[9].triangle[loop_m].vertex[2].z;
+			u_m = sector[9].triangle[loop_m].vertex[2].u;
+			v_m = sector[9].triangle[loop_m].vertex[2].v;
+			glTexCoord2f(u_m,v_m); glVertex3f(x_m,y_m,z_m);
+		glEnd();
+	}
+	/////////////////////////////////////////////////////
+		glBindTexture(GL_TEXTURE_2D, texture[9]);
+	
+	numtriangles = sector[10].numtriangles;
+	//numtriangles = 1;
+	
+	// Process Each Triangle
+	for (int loop_m = 0; loop_m < numtriangles; loop_m++)
+	{
+		glBegin(GL_TRIANGLES);
+			glNormal3f( 0.0f, 0.0f, 1.0f);
+			x_m = sector[10].triangle[loop_m].vertex[0].x;
+			y_m = sector[10].triangle[loop_m].vertex[0].y;
+			z_m = sector[10].triangle[loop_m].vertex[0].z;
+			u_m = sector[10].triangle[loop_m].vertex[0].u;
+			v_m = sector[10].triangle[loop_m].vertex[0].v;
+			glTexCoord2f(u_m,v_m); glVertex3f(x_m,y_m,z_m);
+			
+			x_m = sector[10].triangle[loop_m].vertex[1].x;
+			y_m = sector[10].triangle[loop_m].vertex[1].y;
+			z_m = sector[10].triangle[loop_m].vertex[1].z;
+			u_m = sector[10].triangle[loop_m].vertex[1].u;
+			v_m = sector[10].triangle[loop_m].vertex[1].v;
+			glTexCoord2f(u_m,v_m); glVertex3f(x_m,y_m,z_m);
+			
+			x_m = sector[10].triangle[loop_m].vertex[2].x;
+			y_m = sector[10].triangle[loop_m].vertex[2].y;
+			z_m = sector[10].triangle[loop_m].vertex[2].z;
+			u_m = sector[10].triangle[loop_m].vertex[2].u;
+			v_m = sector[10].triangle[loop_m].vertex[2].v;
+			glTexCoord2f(u_m,v_m); glVertex3f(x_m,y_m,z_m);
+		glEnd();
+	}
+	/////////////////////////////////////////////////////
+		glBindTexture(GL_TEXTURE_2D, texture[10]);
+	
+	numtriangles = sector[11].numtriangles;
+	//numtriangles = 1;
+	
+	// Process Each Triangle
+	for (int loop_m = 0; loop_m < numtriangles; loop_m++)
+	{
+		glBegin(GL_TRIANGLES);
+			glNormal3f( 0.0f, 0.0f, 1.0f);
+			x_m = sector[11].triangle[loop_m].vertex[0].x;
+			y_m = sector[11].triangle[loop_m].vertex[0].y;
+			z_m = sector[11].triangle[loop_m].vertex[0].z;
+			u_m = sector[11].triangle[loop_m].vertex[0].u;
+			v_m = sector[11].triangle[loop_m].vertex[0].v;
+			glTexCoord2f(u_m,v_m); glVertex3f(x_m,y_m,z_m);
+			
+			x_m = sector[11].triangle[loop_m].vertex[1].x;
+			y_m = sector[11].triangle[loop_m].vertex[1].y;
+			z_m = sector[11].triangle[loop_m].vertex[1].z;
+			u_m = sector[11].triangle[loop_m].vertex[1].u;
+			v_m = sector[11].triangle[loop_m].vertex[1].v;
+			glTexCoord2f(u_m,v_m); glVertex3f(x_m,y_m,z_m);
+			
+			x_m = sector[11].triangle[loop_m].vertex[2].x;
+			y_m = sector[11].triangle[loop_m].vertex[2].y;
+			z_m = sector[11].triangle[loop_m].vertex[2].z;
+			u_m = sector[11].triangle[loop_m].vertex[2].u;
+			v_m = sector[11].triangle[loop_m].vertex[2].v;
 			glTexCoord2f(u_m,v_m); glVertex3f(x_m,y_m,z_m);
 		glEnd();
 	}
@@ -748,22 +858,6 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
     {{-2.0, -2.0, 0.0}, {4.0, -2.0, 0.0}},
     {{-2.0, 3.0, 0.0}, {3.0, 4.0, 0.0}}
 	};
-
-	glEnable(GL_MAP2_VERTEX_3);
-	glMap2f(GL_MAP2_VERTEX_3,
-    0.0, 1.0,  /* U ranges 0..1 */
-    3,         /* U stride, 3 floats per coord */
-    2,         /* U is 2nd order, ie. linear */
-    0.0, 1.0,  /* V ranges 0..1 */
-    2 * 3,     /* V stride, row is 2 coords, 3 floats per coord */
-    2,         /* V is 2nd order, ie linear */
-    grid2x2);  /* control points */
-	glMapGrid2f(
-    5, 0.0, 1.0,
-    6, 0.0, 1.0);
-	glEvalMesh2(GL_LINE,
-    0, 5,   /* Starting at 0 mesh 5 steps (rows). */
-    0, 6);  /* Starting at 0 mesh 6 steps (columns). */
 	return TRUE;										// Everything Went OK
 }
 
@@ -1134,8 +1228,8 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
 				if (keys[VK_UP])
 				{
 
-					xpos -= (float)sin(heading*piover180) * 0.1f;
-					zpos -= (float)cos(heading*piover180) * 0.1f;
+					xpos -= (float)sin(heading*piover180) * 0.001f;
+					zpos -= (float)cos(heading*piover180) * 0.001f;
 					if (walkbiasangle >= 359.0f)
 					{
 						walkbiasangle = 0.0f;
@@ -1149,8 +1243,8 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
 
 				if (keys[VK_DOWN])
 				{
-					xpos += (float)sin(heading*piover180) * 0.1f;
-					zpos += (float)cos(heading*piover180) * 0.1f;
+					xpos += (float)sin(heading*piover180) * 0.001f;
+					zpos += (float)cos(heading*piover180) * 0.001f;
 					if (walkbiasangle <= 1.0f)
 					{
 						walkbiasangle = 359.0f;
@@ -1165,13 +1259,13 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
 				if (keys[VK_RIGHT])
 				{
 					//heading -= 0.3f;
-					yrot -= 0.3f;
+					yrot -= 0.01f;
 				}
 
 				if (keys[VK_LEFT])
 				{
 					//heading += 0.3f;	
-					yrot += 0.3f;	
+					yrot += 0.01f;	
 				}
 
 				if (keys[VK_PRIOR])
@@ -1199,37 +1293,37 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
 				{
 					float yrotrad;
 					yrotrad = (yrot / 180 * 3.141592654f);
-					xpos += float(cos(yrotrad)) * 0.02;
-					zpos += float(sin(yrotrad)) * 0.02;
+					xpos += float(cos(yrotrad)) * 0.001;
+					zpos += float(sin(yrotrad)) * 0.001;
 				}
 				if (keys[VK_NUMPAD6])
 				{
 					float yrotrad;
 					yrotrad = (yrot / 180 * 3.141592654f);
-					xpos -= float(cos(yrotrad)) * 0.02;
-					zpos -= float(sin(yrotrad)) * 0.02;
+					xpos -= float(cos(yrotrad)) * 0.001;
+					zpos -= float(sin(yrotrad)) * 0.001;
 				}
 				if (keys[VK_NUMPAD2])
 				{
 					float yrotrad;
 					yrotrad = (yrot / 180 * 3.141592654f);
-					zpos += float(cos(yrotrad)) * 0.02;
-					xpos += float(sin(yrotrad)) * 0.02;
+					zpos += float(cos(yrotrad)) * 0.001;
+					xpos += float(sin(yrotrad)) * 0.001;
 				}
 				if (keys[VK_NUMPAD8])
 				{
 					float yrotrad;
 					yrotrad = (yrot / 180 * 3.141592654f);
-					zpos -= float(cos(yrotrad)) * 0.02;
-					xpos -= float(sin(yrotrad)) * 0.02;
+					zpos -= float(cos(yrotrad)) * 0.001;
+					xpos -= float(sin(yrotrad)) * 0.001;
 				}
 				if (keys[VK_NUMPAD7])
 				{
-					ypos += 0.05f;
+					ypos += 0.001f;
 				}
 				if (keys[VK_NUMPAD1])
 				{
-					ypos -= 0.05f;
+					ypos -= 0.001f;
 				}
 			}
 		}
