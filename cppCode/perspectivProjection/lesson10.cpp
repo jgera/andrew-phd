@@ -17,6 +17,7 @@
 //#include <gl\glaux.h>		// Header File For The Glaux Library
 
 
+
 #define BUFSIZE MAX_PATH
 
 
@@ -67,25 +68,8 @@ typedef struct tagSECTOR
 	int numtriangles;
 	TRIANGLE* triangle;
 } SECTOR;
-//Find out how many sector needs to be created base on the txt files in the directory
 
-//WIN32_FIND_DATA findFileData;
-//
-//HANDLE hFind = FindFirstFile("data/*.txt", &findFileData);
-//int file_count = 0;
-int resultXX; 
-//resultXX = checkDirectory(int argc, char *argv[]);
-
-//while(FindNextFile(hFind, &findFileData) != 0);
-	//while(FindNextFile(hFind, &findFileData))
-	//{
-	//	if(findFileData.cFileName == "..") continue;
-	//	files[ file_count ] = findFileData.cFileName;
-	//	file_count++;
-	//}
-
-			
-SECTOR sector[12]; // Our Model Goes Here:
+SECTOR sector[12];
 
 LRESULT	CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);	// Declaration For WndProc
 
@@ -100,10 +84,30 @@ void readstr(FILE *f,char *string)
 
 void SetupWorld()
 {
+	//Reading a txt file containing all the filenames
 	float x, y, z, u, v;
-	int numtriangles;
+	int numtriangles; 
+	int numSectors = 12;
 	FILE *filein;
+	FILE *allFiles;
 	char oneline[255];
+	//Temporary module until i figure out how to use the window api
+	//Opens a txt, and loads up all the filenames into a string array
+	allFiles = fopen("data/allFiles.txt", "rt"); 
+	readstr(allFiles,oneline);
+	sscanf(oneline, "NUMOFSECTORS %d\n", &numSectors); //Get the number of filenames in the txt file
+	char filenames[][50];
+	for (int counter = 1; counter <= numSectors; counter++)
+	{
+		readstr(allFiles,oneline);
+		sscanf(oneline, "%s\n", filenames[counter]);
+	}
+	//store these filenames into a 
+	
+	
+
+	
+	
 	filein = fopen("data/20100301T152407.txt", "rt");				// File To Load World Data From
 
 	readstr(filein,oneline);
@@ -470,14 +474,14 @@ int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 	//IPlatformCommand *m_platform;
 	//HRESULT hResult = CoCreateInstance(CLSID_CPlatformCommand, NULL, CLSCTX_LOCAL_SERVER, IID_IPlatformCommand, (LPVOID*)&m_platform);
 	::CoInitialize(NULL);
-	// Create an instance of the Word application and obtain the
-	// pointer to the application's IDispatch interface.
-	CLSID clsid;
-	HRESULT hr;
-	IUnknown* pUnk;
+	//// Create an instance of the Word application and obtain the
+	//// pointer to the application's IDispatch interface.
+	//CLSID clsid;
+	//HRESULT hr;
+	//IUnknown* pUnk;
 
-	CLSIDFromProgID(L"Word.Application",&clsid);
-	hr = ::CoCreateInstance( clsid, NULL, CLSCTX_SERVER,IID_IUnknown, (void**) &pUnk);
+	//CLSIDFromProgID(L"Word.Application",&clsid);
+	//hr = ::CoCreateInstance( clsid, NULL, CLSCTX_SERVER,IID_IUnknown, (void**) &pUnk);
 
 	return TRUE;										// Initialization Went OK
 }
@@ -507,376 +511,42 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 	cnt1+=0.051f;										// Increase The First Counter
 	cnt2+=0.005f;
 
-	glBindTexture(GL_TEXTURE_2D, texture[0]);
 	
-
-	
-	numtriangles = sector[1].numtriangles;
-	//numtriangles = 1;
-	
-	// Process Each Triangle
-	for (int loop_m = 0; loop_m < numtriangles; loop_m++)
+////////////////////////////////////////////////
+// Process for creating each triangle
+	int numOfSectors = sizeof(sector)/8; //work out how many sectors are required
+	for(int sectorCounter = 1; sectorCounter <= numOfSectors; sectorCounter++)
 	{
-		glBegin(GL_TRIANGLES);
-			glNormal3f( 0.0f, 0.0f, 1.0f);
-			x_m = sector[1].triangle[loop_m].vertex[0].x;
-			y_m = sector[1].triangle[loop_m].vertex[0].y;
-			z_m = sector[1].triangle[loop_m].vertex[0].z;
-			u_m = sector[1].triangle[loop_m].vertex[0].u;
-			v_m = sector[1].triangle[loop_m].vertex[0].v;
-			glTexCoord2f(u_m,v_m); glVertex3f(x_m,y_m,z_m);
-			
-			x_m = sector[1].triangle[loop_m].vertex[1].x;
-			y_m = sector[1].triangle[loop_m].vertex[1].y;
-			z_m = sector[1].triangle[loop_m].vertex[1].z;
-			u_m = sector[1].triangle[loop_m].vertex[1].u;
-			v_m = sector[1].triangle[loop_m].vertex[1].v;
-			glTexCoord2f(u_m,v_m); glVertex3f(x_m,y_m,z_m);
-			
-			x_m = sector[1].triangle[loop_m].vertex[2].x;
-			y_m = sector[1].triangle[loop_m].vertex[2].y;
-			z_m = sector[1].triangle[loop_m].vertex[2].z;
-			u_m = sector[1].triangle[loop_m].vertex[2].u;
-			v_m = sector[1].triangle[loop_m].vertex[2].v;
-			glTexCoord2f(u_m,v_m); glVertex3f(x_m,y_m,z_m);
-		glEnd();
+		glBindTexture(GL_TEXTURE_2D, texture[sectorCounter - 1]);
+		numtriangles = sector[sectorCounter].numtriangles;
+		for (int loop_m = 0; loop_m < numtriangles; loop_m++)
+		{
+			glBegin(GL_TRIANGLES);
+				glNormal3f( 0.0f, 0.0f, 1.0f);
+				x_m = sector[sectorCounter].triangle[loop_m].vertex[0].x;
+				y_m = sector[sectorCounter].triangle[loop_m].vertex[0].y;
+				z_m = sector[sectorCounter].triangle[loop_m].vertex[0].z;
+				u_m = sector[sectorCounter].triangle[loop_m].vertex[0].u;
+				v_m = sector[sectorCounter].triangle[loop_m].vertex[0].v;
+				glTexCoord2f(u_m,v_m); glVertex3f(x_m,y_m,z_m);
+				
+				x_m = sector[sectorCounter].triangle[loop_m].vertex[1].x;
+				y_m = sector[sectorCounter].triangle[loop_m].vertex[1].y;
+				z_m = sector[sectorCounter].triangle[loop_m].vertex[1].z;
+				u_m = sector[sectorCounter].triangle[loop_m].vertex[1].u;
+				v_m = sector[sectorCounter].triangle[loop_m].vertex[1].v;
+				glTexCoord2f(u_m,v_m); glVertex3f(x_m,y_m,z_m);
+				
+				x_m = sector[sectorCounter].triangle[loop_m].vertex[2].x;
+				y_m = sector[sectorCounter].triangle[loop_m].vertex[2].y;
+				z_m = sector[sectorCounter].triangle[loop_m].vertex[2].z;
+				u_m = sector[sectorCounter].triangle[loop_m].vertex[2].u;
+				v_m = sector[sectorCounter].triangle[loop_m].vertex[2].v;
+				glTexCoord2f(u_m,v_m); glVertex3f(x_m,y_m,z_m);
+			glEnd();
+		}
 	}
-	////////////////////////////////////////////
-	glBindTexture(GL_TEXTURE_2D, texture[1]);
-	
-	numtriangles = sector[2].numtriangles;
-	//numtriangles = 1;
-	
-	// Process Each Triangle
-	for (int loop_m = 0; loop_m < numtriangles; loop_m++)
-	{
-		glBegin(GL_TRIANGLES);
-			glNormal3f( 0.0f, 0.0f, 1.0f);
-			x_m = sector[2].triangle[loop_m].vertex[0].x;
-			y_m = sector[2].triangle[loop_m].vertex[0].y;
-			z_m = sector[2].triangle[loop_m].vertex[0].z;
-			u_m = sector[2].triangle[loop_m].vertex[0].u;
-			v_m = sector[2].triangle[loop_m].vertex[0].v;
-			glTexCoord2f(u_m,v_m); glVertex3f(x_m,y_m,z_m);
-			
-			x_m = sector[2].triangle[loop_m].vertex[1].x;
-			y_m = sector[2].triangle[loop_m].vertex[1].y;
-			z_m = sector[2].triangle[loop_m].vertex[1].z;
-			u_m = sector[2].triangle[loop_m].vertex[1].u;
-			v_m = sector[2].triangle[loop_m].vertex[1].v;
-			glTexCoord2f(u_m,v_m); glVertex3f(x_m,y_m,z_m);
-			
-			x_m = sector[2].triangle[loop_m].vertex[2].x;
-			y_m = sector[2].triangle[loop_m].vertex[2].y;
-			z_m = sector[2].triangle[loop_m].vertex[2].z;
-			u_m = sector[2].triangle[loop_m].vertex[2].u;
-			v_m = sector[2].triangle[loop_m].vertex[2].v;
-			glTexCoord2f(u_m,v_m); glVertex3f(x_m,y_m,z_m);
-		glEnd();
-	}
-	/////////////////////////////////////////////////////
-		glBindTexture(GL_TEXTURE_2D, texture[2]);
-	
-	numtriangles = sector[3].numtriangles;
-	//numtriangles = 1;
-	
-	// Process Each Triangle
-	for (int loop_m = 0; loop_m < numtriangles; loop_m++)
-	{
-		glBegin(GL_TRIANGLES);
-			glNormal3f( 0.0f, 0.0f, 1.0f);
-			x_m = sector[3].triangle[loop_m].vertex[0].x;
-			y_m = sector[3].triangle[loop_m].vertex[0].y;
-			z_m = sector[3].triangle[loop_m].vertex[0].z;
-			u_m = sector[3].triangle[loop_m].vertex[0].u;
-			v_m = sector[3].triangle[loop_m].vertex[0].v;
-			glTexCoord2f(u_m,v_m); glVertex3f(x_m,y_m,z_m);
-			
-			x_m = sector[3].triangle[loop_m].vertex[1].x;
-			y_m = sector[3].triangle[loop_m].vertex[1].y;
-			z_m = sector[3].triangle[loop_m].vertex[1].z;
-			u_m = sector[3].triangle[loop_m].vertex[1].u;
-			v_m = sector[3].triangle[loop_m].vertex[1].v;
-			glTexCoord2f(u_m,v_m); glVertex3f(x_m,y_m,z_m);
-			
-			x_m = sector[3].triangle[loop_m].vertex[2].x;
-			y_m = sector[3].triangle[loop_m].vertex[2].y;
-			z_m = sector[3].triangle[loop_m].vertex[2].z;
-			u_m = sector[3].triangle[loop_m].vertex[2].u;
-			v_m = sector[3].triangle[loop_m].vertex[2].v;
-			glTexCoord2f(u_m,v_m); glVertex3f(x_m,y_m,z_m);
-		glEnd();
-	}
-	/////////////////////////////////////////////////////
-		glBindTexture(GL_TEXTURE_2D, texture[3]);
-	
-	numtriangles = sector[4].numtriangles;
-	//numtriangles = 1;
-	
-	// Process Each Triangle
-	for (int loop_m = 0; loop_m < numtriangles; loop_m++)
-	{
-		glBegin(GL_TRIANGLES);
-			glNormal3f( 0.0f, 0.0f, 1.0f);
-			x_m = sector[4].triangle[loop_m].vertex[0].x;
-			y_m = sector[4].triangle[loop_m].vertex[0].y;
-			z_m = sector[4].triangle[loop_m].vertex[0].z;
-			u_m = sector[4].triangle[loop_m].vertex[0].u;
-			v_m = sector[4].triangle[loop_m].vertex[0].v;
-			glTexCoord2f(u_m,v_m); glVertex3f(x_m,y_m,z_m);
-			
-			x_m = sector[4].triangle[loop_m].vertex[1].x;
-			y_m = sector[4].triangle[loop_m].vertex[1].y;
-			z_m = sector[4].triangle[loop_m].vertex[1].z;
-			u_m = sector[4].triangle[loop_m].vertex[1].u;
-			v_m = sector[4].triangle[loop_m].vertex[1].v;
-			glTexCoord2f(u_m,v_m); glVertex3f(x_m,y_m,z_m);
-			
-			x_m = sector[4].triangle[loop_m].vertex[2].x;
-			y_m = sector[4].triangle[loop_m].vertex[2].y;
-			z_m = sector[4].triangle[loop_m].vertex[2].z;
-			u_m = sector[4].triangle[loop_m].vertex[2].u;
-			v_m = sector[4].triangle[loop_m].vertex[2].v;
-			glTexCoord2f(u_m,v_m); glVertex3f(x_m,y_m,z_m);
-		glEnd();
-	}
-	/////////////////////////////////////////////////////
-		glBindTexture(GL_TEXTURE_2D, texture[4]);
-	
-	numtriangles = sector[5].numtriangles;
-	//numtriangles = 1;
-	
-	// Process Each Triangle
-	for (int loop_m = 0; loop_m < numtriangles; loop_m++)
-	{
-		glBegin(GL_TRIANGLES);
-			glNormal3f( 0.0f, 0.0f, 1.0f);
-			x_m = sector[5].triangle[loop_m].vertex[0].x;
-			y_m = sector[5].triangle[loop_m].vertex[0].y;
-			z_m = sector[5].triangle[loop_m].vertex[0].z;
-			u_m = sector[5].triangle[loop_m].vertex[0].u;
-			v_m = sector[5].triangle[loop_m].vertex[0].v;
-			glTexCoord2f(u_m,v_m); glVertex3f(x_m,y_m,z_m);
-			
-			x_m = sector[5].triangle[loop_m].vertex[1].x;
-			y_m = sector[5].triangle[loop_m].vertex[1].y;
-			z_m = sector[5].triangle[loop_m].vertex[1].z;
-			u_m = sector[5].triangle[loop_m].vertex[1].u;
-			v_m = sector[5].triangle[loop_m].vertex[1].v;
-			glTexCoord2f(u_m,v_m); glVertex3f(x_m,y_m,z_m);
-			
-			x_m = sector[5].triangle[loop_m].vertex[2].x;
-			y_m = sector[5].triangle[loop_m].vertex[2].y;
-			z_m = sector[5].triangle[loop_m].vertex[2].z;
-			u_m = sector[5].triangle[loop_m].vertex[2].u;
-			v_m = sector[5].triangle[loop_m].vertex[2].v;
-			glTexCoord2f(u_m,v_m); glVertex3f(x_m,y_m,z_m);
-		glEnd();
-	}
-	/////////////////////////////////////////////////////
-		glBindTexture(GL_TEXTURE_2D, texture[5]);
-	
-	numtriangles = sector[6].numtriangles;
-	//numtriangles = 1;
-	
-	// Process Each Triangle
-	for (int loop_m = 0; loop_m < numtriangles; loop_m++)
-	{
-		glBegin(GL_TRIANGLES);
-			glNormal3f( 0.0f, 0.0f, 1.0f);
-			x_m = sector[6].triangle[loop_m].vertex[0].x;
-			y_m = sector[6].triangle[loop_m].vertex[0].y;
-			z_m = sector[6].triangle[loop_m].vertex[0].z;
-			u_m = sector[6].triangle[loop_m].vertex[0].u;
-			v_m = sector[6].triangle[loop_m].vertex[0].v;
-			glTexCoord2f(u_m,v_m); glVertex3f(x_m,y_m,z_m);
-			
-			x_m = sector[6].triangle[loop_m].vertex[1].x;
-			y_m = sector[6].triangle[loop_m].vertex[1].y;
-			z_m = sector[6].triangle[loop_m].vertex[1].z;
-			u_m = sector[6].triangle[loop_m].vertex[1].u;
-			v_m = sector[6].triangle[loop_m].vertex[1].v;
-			glTexCoord2f(u_m,v_m); glVertex3f(x_m,y_m,z_m);
-			
-			x_m = sector[6].triangle[loop_m].vertex[2].x;
-			y_m = sector[6].triangle[loop_m].vertex[2].y;
-			z_m = sector[6].triangle[loop_m].vertex[2].z;
-			u_m = sector[6].triangle[loop_m].vertex[2].u;
-			v_m = sector[6].triangle[loop_m].vertex[2].v;
-			glTexCoord2f(u_m,v_m); glVertex3f(x_m,y_m,z_m);
-		glEnd();
-	}
-	/////////////////////////////////////////////////////
-		glBindTexture(GL_TEXTURE_2D, texture[6]);
-	
-	numtriangles = sector[7].numtriangles;
-	//numtriangles = 1;
-	
-	// Process Each Triangle
-	for (int loop_m = 0; loop_m < numtriangles; loop_m++)
-	{
-		glBegin(GL_TRIANGLES);
-			glNormal3f( 0.0f, 0.0f, 1.0f);
-			x_m = sector[7].triangle[loop_m].vertex[0].x;
-			y_m = sector[7].triangle[loop_m].vertex[0].y;
-			z_m = sector[7].triangle[loop_m].vertex[0].z;
-			u_m = sector[7].triangle[loop_m].vertex[0].u;
-			v_m = sector[7].triangle[loop_m].vertex[0].v;
-			glTexCoord2f(u_m,v_m); glVertex3f(x_m,y_m,z_m);
-			
-			x_m = sector[7].triangle[loop_m].vertex[1].x;
-			y_m = sector[7].triangle[loop_m].vertex[1].y;
-			z_m = sector[7].triangle[loop_m].vertex[1].z;
-			u_m = sector[7].triangle[loop_m].vertex[1].u;
-			v_m = sector[7].triangle[loop_m].vertex[1].v;
-			glTexCoord2f(u_m,v_m); glVertex3f(x_m,y_m,z_m);
-			
-			x_m = sector[7].triangle[loop_m].vertex[2].x;
-			y_m = sector[7].triangle[loop_m].vertex[2].y;
-			z_m = sector[7].triangle[loop_m].vertex[2].z;
-			u_m = sector[7].triangle[loop_m].vertex[2].u;
-			v_m = sector[7].triangle[loop_m].vertex[2].v;
-			glTexCoord2f(u_m,v_m); glVertex3f(x_m,y_m,z_m);
-		glEnd();
-	}
-	/////////////////////////////////////////////////////
-		glBindTexture(GL_TEXTURE_2D, texture[7]);
-	
-	numtriangles = sector[8].numtriangles;
-	//numtriangles = 1;
-	
-	// Process Each Triangle
-	for (int loop_m = 0; loop_m < numtriangles; loop_m++)
-	{
-		glBegin(GL_TRIANGLES);
-			glNormal3f( 0.0f, 0.0f, 1.0f);
-			x_m = sector[8].triangle[loop_m].vertex[0].x;
-			y_m = sector[8].triangle[loop_m].vertex[0].y;
-			z_m = sector[8].triangle[loop_m].vertex[0].z;
-			u_m = sector[8].triangle[loop_m].vertex[0].u;
-			v_m = sector[8].triangle[loop_m].vertex[0].v;
-			glTexCoord2f(u_m,v_m); glVertex3f(x_m,y_m,z_m);
-			
-			x_m = sector[8].triangle[loop_m].vertex[1].x;
-			y_m = sector[8].triangle[loop_m].vertex[1].y;
-			z_m = sector[8].triangle[loop_m].vertex[1].z;
-			u_m = sector[8].triangle[loop_m].vertex[1].u;
-			v_m = sector[8].triangle[loop_m].vertex[1].v;
-			glTexCoord2f(u_m,v_m); glVertex3f(x_m,y_m,z_m);
-			
-			x_m = sector[8].triangle[loop_m].vertex[2].x;
-			y_m = sector[8].triangle[loop_m].vertex[2].y;
-			z_m = sector[8].triangle[loop_m].vertex[2].z;
-			u_m = sector[8].triangle[loop_m].vertex[2].u;
-			v_m = sector[8].triangle[loop_m].vertex[2].v;
-			glTexCoord2f(u_m,v_m); glVertex3f(x_m,y_m,z_m);
-		glEnd();
-	}
-	/////////////////////////////////////////////////////
-		glBindTexture(GL_TEXTURE_2D, texture[8]);
-	
-	numtriangles = sector[9].numtriangles;
-	//numtriangles = 1;
-	
-	// Process Each Triangle
-	for (int loop_m = 0; loop_m < numtriangles; loop_m++)
-	{
-		glBegin(GL_TRIANGLES);
-			glNormal3f( 0.0f, 0.0f, 1.0f);
-			x_m = sector[9].triangle[loop_m].vertex[0].x;
-			y_m = sector[9].triangle[loop_m].vertex[0].y;
-			z_m = sector[9].triangle[loop_m].vertex[0].z;
-			u_m = sector[9].triangle[loop_m].vertex[0].u;
-			v_m = sector[9].triangle[loop_m].vertex[0].v;
-			glTexCoord2f(u_m,v_m); glVertex3f(x_m,y_m,z_m);
-			
-			x_m = sector[9].triangle[loop_m].vertex[1].x;
-			y_m = sector[9].triangle[loop_m].vertex[1].y;
-			z_m = sector[9].triangle[loop_m].vertex[1].z;
-			u_m = sector[9].triangle[loop_m].vertex[1].u;
-			v_m = sector[9].triangle[loop_m].vertex[1].v;
-			glTexCoord2f(u_m,v_m); glVertex3f(x_m,y_m,z_m);
-			
-			x_m = sector[9].triangle[loop_m].vertex[2].x;
-			y_m = sector[9].triangle[loop_m].vertex[2].y;
-			z_m = sector[9].triangle[loop_m].vertex[2].z;
-			u_m = sector[9].triangle[loop_m].vertex[2].u;
-			v_m = sector[9].triangle[loop_m].vertex[2].v;
-			glTexCoord2f(u_m,v_m); glVertex3f(x_m,y_m,z_m);
-		glEnd();
-	}
-	/////////////////////////////////////////////////////
-		glBindTexture(GL_TEXTURE_2D, texture[9]);
-	
-	numtriangles = sector[10].numtriangles;
-	//numtriangles = 1;
-	
-	// Process Each Triangle
-	for (int loop_m = 0; loop_m < numtriangles; loop_m++)
-	{
-		glBegin(GL_TRIANGLES);
-			glNormal3f( 0.0f, 0.0f, 1.0f);
-			x_m = sector[10].triangle[loop_m].vertex[0].x;
-			y_m = sector[10].triangle[loop_m].vertex[0].y;
-			z_m = sector[10].triangle[loop_m].vertex[0].z;
-			u_m = sector[10].triangle[loop_m].vertex[0].u;
-			v_m = sector[10].triangle[loop_m].vertex[0].v;
-			glTexCoord2f(u_m,v_m); glVertex3f(x_m,y_m,z_m);
-			
-			x_m = sector[10].triangle[loop_m].vertex[1].x;
-			y_m = sector[10].triangle[loop_m].vertex[1].y;
-			z_m = sector[10].triangle[loop_m].vertex[1].z;
-			u_m = sector[10].triangle[loop_m].vertex[1].u;
-			v_m = sector[10].triangle[loop_m].vertex[1].v;
-			glTexCoord2f(u_m,v_m); glVertex3f(x_m,y_m,z_m);
-			
-			x_m = sector[10].triangle[loop_m].vertex[2].x;
-			y_m = sector[10].triangle[loop_m].vertex[2].y;
-			z_m = sector[10].triangle[loop_m].vertex[2].z;
-			u_m = sector[10].triangle[loop_m].vertex[2].u;
-			v_m = sector[10].triangle[loop_m].vertex[2].v;
-			glTexCoord2f(u_m,v_m); glVertex3f(x_m,y_m,z_m);
-		glEnd();
-	}
-	/////////////////////////////////////////////////////
-		glBindTexture(GL_TEXTURE_2D, texture[10]);
-	
-	numtriangles = sector[11].numtriangles;
-	//numtriangles = 1;
-	
-	// Process Each Triangle
-	for (int loop_m = 0; loop_m < numtriangles; loop_m++)
-	{
-		glBegin(GL_TRIANGLES);
-			glNormal3f( 0.0f, 0.0f, 1.0f);
-			x_m = sector[11].triangle[loop_m].vertex[0].x;
-			y_m = sector[11].triangle[loop_m].vertex[0].y;
-			z_m = sector[11].triangle[loop_m].vertex[0].z;
-			u_m = sector[11].triangle[loop_m].vertex[0].u;
-			v_m = sector[11].triangle[loop_m].vertex[0].v;
-			glTexCoord2f(u_m,v_m); glVertex3f(x_m,y_m,z_m);
-			
-			x_m = sector[11].triangle[loop_m].vertex[1].x;
-			y_m = sector[11].triangle[loop_m].vertex[1].y;
-			z_m = sector[11].triangle[loop_m].vertex[1].z;
-			u_m = sector[11].triangle[loop_m].vertex[1].u;
-			v_m = sector[11].triangle[loop_m].vertex[1].v;
-			glTexCoord2f(u_m,v_m); glVertex3f(x_m,y_m,z_m);
-			
-			x_m = sector[11].triangle[loop_m].vertex[2].x;
-			y_m = sector[11].triangle[loop_m].vertex[2].y;
-			z_m = sector[11].triangle[loop_m].vertex[2].z;
-			u_m = sector[11].triangle[loop_m].vertex[2].u;
-			v_m = sector[11].triangle[loop_m].vertex[2].v;
-			glTexCoord2f(u_m,v_m); glVertex3f(x_m,y_m,z_m);
-		glEnd();
-	}
-	//This code is to add a grid to the environment
-	// http://www.opengl.org/resources/code/samples/mjktips/grid/index.html
-	GLfloat grid2x2[2][2][3] = {
-    {{-2.0, -2.0, 0.0}, {4.0, -2.0, 0.0}},
-    {{-2.0, 3.0, 0.0}, {3.0, 4.0, 0.0}}
-	};
+////////////////////////////////////////////////
 	return TRUE;										// Everything Went OK
 }
 

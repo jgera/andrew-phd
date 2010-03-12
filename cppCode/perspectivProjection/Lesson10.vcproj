@@ -145,6 +145,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="1"
+				AdditionalIncludeDirectories="D:\PhdStorageCodes\cppCode\perspectivProjection"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS"
 				StringPooling="true"
 				RuntimeLibrary="0"
@@ -169,7 +170,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="opengl32.lib glu32.lib glaux.lib odbc32.lib odbccp32.lib"
+				AdditionalDependencies="opengl32.lib glu32.lib odbc32.lib odbccp32.lib ole32.lib"
 				OutputFile=".\Release/Lesson10.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
