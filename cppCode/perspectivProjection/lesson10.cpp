@@ -46,11 +46,13 @@ GLfloat lookupdown = 0.0f;
 GLfloat	z=0.0f;				// Depth Into The Screen
 
 GLuint	filter;				// Which Filter To Use
-GLuint	texture[10];			// Storage For 11 Textures
+GLuint	*texture;			// Pointer to the texture array
 GLuint	base;				// Base Display List For The Font Set
 GLfloat	cnt1;				// 1st Counter Used To Move Text & For Coloring
 GLfloat	cnt2;				// 2nd Counter Used To Move Text & For Coloring
 //GLuint	texture[7];			// Storage For 7 Textures
+int numSectors = 0;	//Global variable
+
 
 typedef struct tagVERTEX
 {
@@ -68,9 +70,7 @@ typedef struct tagSECTOR
 	int numtriangles;
 	TRIANGLE* triangle;
 } SECTOR;
-
-SECTOR sector[12];
-
+SECTOR *sector; 
 LRESULT	CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);	// Declaration For WndProc
 
 void readstr(FILE *f,char *string)
@@ -86,278 +86,65 @@ void SetupWorld()
 {
 	//Reading a txt file containing all the filenames
 	float x, y, z, u, v;
-	int numtriangles; 
-	int numSectors = 12;
+	int numtriangles; 	
 	FILE *filein;
-	FILE *allFiles;
+	FILE *allFiles;	
 	char oneline[255];
 	//Temporary module until i figure out how to use the window api
 	//Opens a txt, and loads up all the filenames into a string array
 	allFiles = fopen("data/allFiles.txt", "rt"); 
 	readstr(allFiles,oneline);
 	sscanf(oneline, "NUMOFSECTORS %d\n", &numSectors); //Get the number of filenames in the txt file
-	char filenames[][50];
-	for (int counter = 1; counter <= numSectors; counter++)
+
+	//Get the size of the variables; sector and filnames sorted		
+	sector = (SECTOR *)malloc(numSectors*sizeof(*sector));
+	char **filenames = (char **)malloc(numSectors*sizeof(*filenames));	
+	for (int i = 0; i < numSectors; i++)
+	{
+		filenames[i] = (char *)malloc(50*sizeof(*filenames[0]));		
+	}
+
+	//char filenames[100][50]; //shouldn't be hard coded size
+	//This is code trying to dynamically assign the size of the filename array
+	//char **filenames = (char**)malloc(numSectors*sizeof(char*));
+	//for (int i = 0; i<=50; ++i)
+	//{
+	//	filenames[i] = (char*)malloc(50*sizeof(char));
+	//}
+	///////////////////////////////////
+
+	//This puts all the txt filenames into the array, this is not the best way right now to code, could
+	//be more condensed without this module, but this is to structure it for better code later.
+	for (int counter = 0; counter < numSectors; counter++)
 	{
 		readstr(allFiles,oneline);
 		sscanf(oneline, "%s\n", filenames[counter]);
 	}
-	//store these filenames into a 
-	
-	
-
-	
-	
-	filein = fopen("data/20100301T152407.txt", "rt");				// File To Load World Data From
-
-	readstr(filein,oneline);
-	sscanf(oneline, "NUMPOLLIES %d\n", &numtriangles);
-
-	sector[1].triangle = new TRIANGLE[numtriangles];
-	sector[1].numtriangles = numtriangles;
-	for (int loop = 0; loop < numtriangles; loop++)
-	{
-		for (int vert = 0; vert < 3; vert++)
-		{
-			readstr(filein,oneline);
-			sscanf(oneline, "%f %f %f %f %f", &x, &z, &y, &v, &u); // Conversion Z axis = Y axis, image coordinates has to be rotated 90 degrees anti clockwise
-			sector[1].triangle[loop].vertex[vert].x = -x;
-			sector[1].triangle[loop].vertex[vert].y = y;
-			sector[1].triangle[loop].vertex[vert].z = z;
-			sector[1].triangle[loop].vertex[vert].u = u;
-			sector[1].triangle[loop].vertex[vert].v = 1-v;
-		}
-	}
-	fclose(filein);
-
-	//////////////////////////////////
-	filein = fopen("data/20100301T152428.txt", "rt");				// File To Load World Data From
-
-	readstr(filein,oneline);
-	sscanf(oneline, "NUMPOLLIES %d\n", &numtriangles);
-
-	sector[2].triangle = new TRIANGLE[numtriangles];
-	sector[2].numtriangles = numtriangles;
-	for (int loop = 0; loop < numtriangles; loop++)
-	{
-		for (int vert = 0; vert < 3; vert++)
-		{
-			readstr(filein,oneline);
-			sscanf(oneline, "%f %f %f %f %f", &x, &z, &y, &v, &u);
-			sector[2].triangle[loop].vertex[vert].x = -x;
-			sector[2].triangle[loop].vertex[vert].y = y;
-			sector[2].triangle[loop].vertex[vert].z = z;
-			sector[2].triangle[loop].vertex[vert].u = u;
-			sector[2].triangle[loop].vertex[vert].v = 1-v;
-		}
-	}
-	fclose(filein);
-	////////////////////////////////////////////
-		filein = fopen("data/20100301T152433.txt", "rt");				// File To Load World Data From
-
-	readstr(filein,oneline);
-	sscanf(oneline, "NUMPOLLIES %d\n", &numtriangles);
-
-	sector[3].triangle = new TRIANGLE[numtriangles];
-	sector[3].numtriangles = numtriangles;
-	for (int loop = 0; loop < numtriangles; loop++)
-	{
-		for (int vert = 0; vert < 3; vert++)
-		{
-			readstr(filein,oneline);
-			sscanf(oneline, "%f %f %f %f %f", &x, &z, &y, &v, &u);
-			sector[3].triangle[loop].vertex[vert].x = -x;
-			sector[3].triangle[loop].vertex[vert].y = y;
-			sector[3].triangle[loop].vertex[vert].z = z;
-			sector[3].triangle[loop].vertex[vert].u = u;
-			sector[3].triangle[loop].vertex[vert].v = 1-v;
-		}
-	}
-	fclose(filein);
-	/////////////////////////////////////////
-	////////////////////////////////////////////
-		filein = fopen("data/20100301T152448.txt", "rt");				// File To Load World Data From
-
-	readstr(filein,oneline);
-	sscanf(oneline, "NUMPOLLIES %d\n", &numtriangles);
-
-	sector[4].triangle = new TRIANGLE[numtriangles];
-	sector[4].numtriangles = numtriangles;
-	for (int loop = 0; loop < numtriangles; loop++)
-	{
-		for (int vert = 0; vert < 3; vert++)
-		{
-			readstr(filein,oneline);
-			sscanf(oneline, "%f %f %f %f %f", &x, &z, &y, &v, &u);
-			sector[4].triangle[loop].vertex[vert].x = -x;
-			sector[4].triangle[loop].vertex[vert].y = y;
-			sector[4].triangle[loop].vertex[vert].z = z;
-			sector[4].triangle[loop].vertex[vert].u = u;
-			sector[4].triangle[loop].vertex[vert].v = 1-v;
-		}
-	}
-	fclose(filein);
-	/////////////////////////////////////////
-	////////////////////////////////////////////
-		filein = fopen("data/20100301T152510.txt", "rt");				// File To Load World Data From
-
-	readstr(filein,oneline);
-	sscanf(oneline, "NUMPOLLIES %d\n", &numtriangles);
-
-	sector[5].triangle = new TRIANGLE[numtriangles];
-	sector[5].numtriangles = numtriangles;
-	for (int loop = 0; loop < numtriangles; loop++)
-	{
-		for (int vert = 0; vert < 3; vert++)
-		{
-			readstr(filein,oneline);
-			sscanf(oneline, "%f %f %f %f %f", &x, &z, &y, &v, &u);
-			sector[5].triangle[loop].vertex[vert].x = -x;
-			sector[5].triangle[loop].vertex[vert].y = y;
-			sector[5].triangle[loop].vertex[vert].z = z;
-			sector[5].triangle[loop].vertex[vert].u = u;
-			sector[5].triangle[loop].vertex[vert].v = 1-v;
-		}
-	}
-	fclose(filein);
-	/////////////////////////////////////////
-	////////////////////////////////////////////
-		filein = fopen("data/20100301T152515.txt", "rt");				// File To Load World Data From
-
-	readstr(filein,oneline);
-	sscanf(oneline, "NUMPOLLIES %d\n", &numtriangles);
-
-	sector[6].triangle = new TRIANGLE[numtriangles];
-	sector[6].numtriangles = numtriangles;
-	for (int loop = 0; loop < numtriangles; loop++)
-	{
-		for (int vert = 0; vert < 3; vert++)
-		{
-			readstr(filein,oneline);
-			sscanf(oneline, "%f %f %f %f %f", &x, &z, &y, &v, &u);
-			sector[6].triangle[loop].vertex[vert].x = -x;
-			sector[6].triangle[loop].vertex[vert].y = y;
-			sector[6].triangle[loop].vertex[vert].z = z;
-			sector[6].triangle[loop].vertex[vert].u = u;
-			sector[6].triangle[loop].vertex[vert].v = 1-v;
-		}
-	}
-	fclose(filein);
-	/////////////////////////////////////////
-	////////////////////////////////////////////
-		filein = fopen("data/20100301T152531.txt", "rt");				// File To Load World Data From
-
-	readstr(filein,oneline);
-	sscanf(oneline, "NUMPOLLIES %d\n", &numtriangles);
-
-	sector[7].triangle = new TRIANGLE[numtriangles];
-	sector[7].numtriangles = numtriangles;
-	for (int loop = 0; loop < numtriangles; loop++)
-	{
-		for (int vert = 0; vert < 3; vert++)
-		{
-			readstr(filein,oneline);
-			sscanf(oneline, "%f %f %f %f %f", &x, &z, &y, &v, &u);
-			sector[7].triangle[loop].vertex[vert].x = -x;
-			sector[7].triangle[loop].vertex[vert].y = y;
-			sector[7].triangle[loop].vertex[vert].z = z;
-			sector[7].triangle[loop].vertex[vert].u = u;
-			sector[7].triangle[loop].vertex[vert].v = 1-v;
-		}
-	}
-	fclose(filein);
-	/////////////////////////////////////////
-	////////////////////////////////////////////
-		filein = fopen("data/20100301T152554.txt", "rt");				// File To Load World Data From
-
-	readstr(filein,oneline);
-	sscanf(oneline, "NUMPOLLIES %d\n", &numtriangles);
-
-	sector[8].triangle = new TRIANGLE[numtriangles];
-	sector[8].numtriangles = numtriangles;
-	for (int loop = 0; loop < numtriangles; loop++)
-	{
-		for (int vert = 0; vert < 3; vert++)
-		{
-			readstr(filein,oneline);
-			sscanf(oneline, "%f %f %f %f %f", &x, &z, &y, &v, &u);
-			sector[8].triangle[loop].vertex[vert].x = -x;
-			sector[8].triangle[loop].vertex[vert].y = y;
-			sector[8].triangle[loop].vertex[vert].z = z;
-			sector[8].triangle[loop].vertex[vert].u = u;
-			sector[8].triangle[loop].vertex[vert].v = 1-v;
-		}
-	}
-	fclose(filein);
-	/////////////////////////////////////////
-	////////////////////////////////////////////
-		filein = fopen("data/20100301T152616.txt", "rt");				// File To Load World Data From
-
-	readstr(filein,oneline);
-	sscanf(oneline, "NUMPOLLIES %d\n", &numtriangles);
-
-	sector[9].triangle = new TRIANGLE[numtriangles];
-	sector[9].numtriangles = numtriangles;
-	for (int loop = 0; loop < numtriangles; loop++)
-	{
-		for (int vert = 0; vert < 3; vert++)
-		{
-			readstr(filein,oneline);
-			sscanf(oneline, "%f %f %f %f %f", &x, &z, &y, &v, &u);
-			sector[9].triangle[loop].vertex[vert].x = -x;
-			sector[9].triangle[loop].vertex[vert].y = y;
-			sector[9].triangle[loop].vertex[vert].z = z;
-			sector[9].triangle[loop].vertex[vert].u = u;
-			sector[9].triangle[loop].vertex[vert].v = 1-v;
-		}
-	}
-	fclose(filein);
 	///////////////////////////////////////
-		////////////////////////////////////////////
-		filein = fopen("data/20100301T152642.txt", "rt");				// File To Load World Data From
-
-	readstr(filein,oneline);
-	sscanf(oneline, "NUMPOLLIES %d\n", &numtriangles);
-
-	sector[10].triangle = new TRIANGLE[numtriangles];
-	sector[10].numtriangles = numtriangles;
-	for (int loop = 0; loop < numtriangles; loop++)
+	
+	//This loads the text data into 	
+	for (int counter = 0; counter < numSectors; counter++)
 	{
-		for (int vert = 0; vert < 3; vert++)
+		filein = fopen(filenames[counter], "rt");
+		readstr(filein,oneline);
+		sscanf(oneline, "NUMPOLLIES %d\n", &numtriangles);
+		sector[counter].triangle = new TRIANGLE[numtriangles];
+		sector[counter].numtriangles = numtriangles;
+		for (int loop = 0; loop < numtriangles; loop++)
 		{
-			readstr(filein,oneline);
-			sscanf(oneline, "%f %f %f %f %f", &x, &z, &y, &v, &u);
-			sector[10].triangle[loop].vertex[vert].x = -x;
-			sector[10].triangle[loop].vertex[vert].y = y;
-			sector[10].triangle[loop].vertex[vert].z = z;
-			sector[10].triangle[loop].vertex[vert].u = u;
-			sector[10].triangle[loop].vertex[vert].v = 1-v;
+			for (int vert = 0; vert < 3; vert++)
+			{
+				readstr(filein,oneline);
+				sscanf(oneline, "%f %f %f %f %f", &x, &z, &y, &v, &u); // Conversion Z axis = Y axis, image coordinates has to be rotated 90 degrees anti clockwise
+				sector[counter].triangle[loop].vertex[vert].x = -x;
+				sector[counter].triangle[loop].vertex[vert].y = y;
+				sector[counter].triangle[loop].vertex[vert].z = z;
+				sector[counter].triangle[loop].vertex[vert].u = u;
+				sector[counter].triangle[loop].vertex[vert].v = 1-v;
+			}
 		}
-	}
-	fclose(filein);
-	///////////////////////////////////////
-		////////////////////////////////////////////
-		filein = fopen("data/20100301T152657.txt", "rt");				// File To Load World Data From
-
-	readstr(filein,oneline);
-	sscanf(oneline, "NUMPOLLIES %d\n", &numtriangles);
-
-	sector[11].triangle = new TRIANGLE[numtriangles];
-	sector[11].numtriangles = numtriangles;
-	for (int loop = 0; loop < numtriangles; loop++)
-	{
-		for (int vert = 0; vert < 3; vert++)
-		{
-			readstr(filein,oneline);
-			sscanf(oneline, "%f %f %f %f %f", &x, &z, &y, &v, &u);
-			sector[11].triangle[loop].vertex[vert].x = -x;
-			sector[11].triangle[loop].vertex[vert].y = y;
-			sector[11].triangle[loop].vertex[vert].z = z;
-			sector[11].triangle[loop].vertex[vert].u = u;
-			sector[11].triangle[loop].vertex[vert].v = 1-v;
-		}
-	}
-	fclose(filein);
+		fclose(filein);
+	}	
 	///////////////////////////////////////
 
 	return;
@@ -431,34 +218,34 @@ GLvoid ReSizeGLScene(GLsizei width, GLsizei height)		// Resize And Initialize Th
 
 int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 {
-	//if (!LoadGLTextures())								// Jump To Texture Loading Routine
-	//{
-	//	return FALSE;									// If Texture Didn't Load Return FALSE
-	//}
-	if (!NeHeLoadBitmap("Data/20100301T152407.bmp", texture[0]))					// Load The Bitmap
-		return FALSE;
-	if (!NeHeLoadBitmap("Data/20100301T152428.bmp", texture[1]))					// Load The Bitmap
-		return FALSE;
-	if (!NeHeLoadBitmap("Data/20100301T152433.bmp", texture[2]))					// Load The Bitmap
-		return FALSE;
-	if (!NeHeLoadBitmap("Data/20100301T152448.bmp", texture[3]))					// Load The Bitmap
-		return FALSE;
-	if (!NeHeLoadBitmap("Data/20100301T152510.bmp", texture[4]))					// Load The Bitmap
-		return FALSE;
-	if (!NeHeLoadBitmap("Data/20100301T152515.bmp", texture[5]))					// Load The Bitmap
-		return FALSE;
-	if (!NeHeLoadBitmap("Data/20100301T152531.bmp", texture[6]))					// Load The Bitmap
-		return FALSE;
-	if (!NeHeLoadBitmap("Data/20100301T152554.bmp", texture[7]))					// Load The Bitmap
-		return FALSE;
-	if (!NeHeLoadBitmap("Data/20100301T152616.bmp", texture[8]))					// Load The Bitmap
-		return FALSE;
-	if (!NeHeLoadBitmap("Data/20100301T152642.bmp", texture[9]))					// Load The Bitmap
-		return FALSE;
-	if (!NeHeLoadBitmap("Data/20100301T152657.bmp", texture[10]))					// Load The Bitmap
-		return FALSE;
+	FILE *allBMP;
+	allBMP = fopen("data/allBMP.txt", "rt"); 
+	int numBMP = 0;	
+	char oneline[255];
+	readstr(allBMP,oneline);
+	sscanf(oneline, "NUMOFBMP %d\n", &numBMP); //Get the number of filenames in the txt file
 
+	//Dynamically assigning a 2D array of how ever many strings there are needed with 50 characters per string
+	// Texture 1D array is also created
+	char **BMPnames = (char **)malloc(numBMP*sizeof(*BMPnames));	
+	texture = (GLuint *)malloc(numBMP*sizeof(GLuint));
+	for (int i = 0; i < numBMP; i++)
+	{
+		BMPnames[i] = (char *)malloc(50*sizeof(*BMPnames[0]));		
+	}
+	
+	// Put the image file names into the created 2D array
+	for (int counter = 0; counter < numBMP; counter++)
+	{
+		readstr(allBMP,oneline);
+		sscanf(oneline, "%s\n", BMPnames[counter]);
+	}
 
+	for (int counter = 0; counter < numBMP; counter++)
+	{
+		if (!NeHeLoadBitmap(BMPnames[counter], texture[counter]))					// Load The Bitmap
+		return FALSE;
+	}
 	glEnable(GL_TEXTURE_2D);							// Enable Texture Mapping
 	glBlendFunc(GL_SRC_ALPHA,GL_ONE);					// Set The Blending Function For Translucency
 	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);				// This Will Clear The Background Color To Black
@@ -514,10 +301,10 @@ int DrawGLScene(GLvoid)									// Here's Where We Do All The Drawing
 	
 ////////////////////////////////////////////////
 // Process for creating each triangle
-	int numOfSectors = sizeof(sector)/8; //work out how many sectors are required
-	for(int sectorCounter = 1; sectorCounter <= numOfSectors; sectorCounter++)
+	//int numOfSectors = sizeof(sector)/8; //work out how many sectors are required
+	for(int sectorCounter = 0; sectorCounter < numSectors; sectorCounter++)
 	{
-		glBindTexture(GL_TEXTURE_2D, texture[sectorCounter - 1]);
+		glBindTexture(GL_TEXTURE_2D, texture[sectorCounter]);
 		numtriangles = sector[sectorCounter].numtriangles;
 		for (int loop_m = 0; loop_m < numtriangles; loop_m++)
 		{
@@ -948,13 +735,13 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
 				if (keys[VK_RIGHT])
 				{
 					//heading -= 0.3f;
-					yrot -= 0.01f;
+					yrot -= 0.05f;
 				}
 
 				if (keys[VK_LEFT])
 				{
 					//heading += 0.3f;	
-					yrot += 0.01f;	
+					yrot += 0.05f;	
 				}
 
 				if (keys[VK_PRIOR])
@@ -982,37 +769,37 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
 				{
 					float yrotrad;
 					yrotrad = (yrot / 180 * 3.141592654f);
-					xpos += float(cos(yrotrad)) * 0.001;
-					zpos += float(sin(yrotrad)) * 0.001;
+					xpos += float(cos(yrotrad)) * 0.01;
+					zpos += float(sin(yrotrad)) * 0.01;
 				}
 				if (keys[VK_NUMPAD6])
 				{
 					float yrotrad;
 					yrotrad = (yrot / 180 * 3.141592654f);
-					xpos -= float(cos(yrotrad)) * 0.001;
-					zpos -= float(sin(yrotrad)) * 0.001;
+					xpos -= float(cos(yrotrad)) * 0.01;
+					zpos -= float(sin(yrotrad)) * 0.01;
 				}
 				if (keys[VK_NUMPAD2])
 				{
 					float yrotrad;
 					yrotrad = (yrot / 180 * 3.141592654f);
-					zpos += float(cos(yrotrad)) * 0.001;
-					xpos += float(sin(yrotrad)) * 0.001;
+					zpos += float(cos(yrotrad)) * 0.01;
+					xpos += float(sin(yrotrad)) * 0.01;
 				}
 				if (keys[VK_NUMPAD8])
 				{
 					float yrotrad;
 					yrotrad = (yrot / 180 * 3.141592654f);
-					zpos -= float(cos(yrotrad)) * 0.001;
-					xpos -= float(sin(yrotrad)) * 0.001;
+					zpos -= float(cos(yrotrad)) * 0.01;
+					xpos -= float(sin(yrotrad)) * 0.01;
 				}
 				if (keys[VK_NUMPAD7])
 				{
-					ypos += 0.001f;
+					ypos += 0.01f;
 				}
 				if (keys[VK_NUMPAD1])
 				{
-					ypos -= 0.001f;
+					ypos -= 0.01f;
 				}
 			}
 		}
