@@ -92,7 +92,7 @@ void SetupWorld()
 	char oneline[255];
 	//Temporary module until i figure out how to use the window api
 	//Opens a txt, and loads up all the filenames into a string array
-	allFiles = fopen("data/allFiles.txt", "rt"); 
+	allFiles = fopen("allFiles.txt", "rt"); 
 	readstr(allFiles,oneline);
 	sscanf(oneline, "NUMOFSECTORS %d\n", &numSectors); //Get the number of filenames in the txt file
 
@@ -219,7 +219,7 @@ GLvoid ReSizeGLScene(GLsizei width, GLsizei height)		// Resize And Initialize Th
 int InitGL(GLvoid)										// All Setup For OpenGL Goes Here
 {
 	FILE *allBMP;
-	allBMP = fopen("data/allBMP.txt", "rt"); 
+	allBMP = fopen("allBMP.txt", "rt"); 
 	int numBMP = 0;	
 	char oneline[255];
 	readstr(allBMP,oneline);
