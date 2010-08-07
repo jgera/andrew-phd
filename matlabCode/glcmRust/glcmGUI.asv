@@ -91,7 +91,7 @@ image(data.randomImage, 'parent',handles.axes2);
 %% --- Perform the classification of the sample material on button press in pushbutton2.
 function pushbutton2_Callback(hObject, eventdata, handles)
 global data;
-updateModel(handles);
+%updateModel(handles);
 if get(handles.textureClassification,'value') == 1
     data.glcmProperties = createGLCMProperties(data.randomImage); %Generate the properties for the randomImage
     data.overallProbPercent = generatePDF(data.glcmProperties, data.model);

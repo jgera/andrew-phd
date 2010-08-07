@@ -7,6 +7,7 @@ labelImage = zeros(size(image,1), size(image,2));
 
 columnLeftover = rem(size(image,2),pixel);
 rowLeftover = rem(size(image,1),pixel);
+windowClass_count=zeros([4,1]);
 for i=1:rowSegment
     for j=1:columnSegment
         imageSection = image((i-1)*pixel+1:i*pixel,(j-1)*pixel+1:j*pixel,:); 
@@ -23,21 +24,25 @@ for i=1:rowSegment
            rgbImage((i-1)*pixel+1:i*pixel,(j-1)*pixel+1:j*pixel,1) = 0;
            rgbImage((i-1)*pixel+1:i*pixel,(j-1)*pixel+1:j*pixel,2) = 0;
            rgbImage((i-1)*pixel+1:i*pixel,(j-1)*pixel+1:j*pixel,3) = 255;
+           windowClass_count(1)=windowClass_count(1)+1;
         end
         if windowClass == 2
            rgbImage((i-1)*pixel+1:i*pixel,(j-1)*pixel+1:j*pixel,1) = 0;
            rgbImage((i-1)*pixel+1:i*pixel,(j-1)*pixel+1:j*pixel,2) = 255;
            rgbImage((i-1)*pixel+1:i*pixel,(j-1)*pixel+1:j*pixel,3) = 255; 
+           windowClass_count(2)=windowClass_count(2)+1;
         end
         if windowClass == 3
            rgbImage((i-1)*pixel+1:i*pixel,(j-1)*pixel+1:j*pixel,1) = 255;
            rgbImage((i-1)*pixel+1:i*pixel,(j-1)*pixel+1:j*pixel,2) = 255;
            rgbImage((i-1)*pixel+1:i*pixel,(j-1)*pixel+1:j*pixel,3) = 0;
+           windowClass_count(3)=windowClass_count(3)+1;
         end
         if windowClass == 4
            rgbImage((i-1)*pixel+1:i*pixel,(j-1)*pixel+1:j*pixel,1) = 255;
            rgbImage((i-1)*pixel+1:i*pixel,(j-1)*pixel+1:j*pixel,2) = 0;
            rgbImage((i-1)*pixel+1:i*pixel,(j-1)*pixel+1:j*pixel,3) = 0;
+           windowClass_count(4)=windowClass_count(4)+1;
         end       
     end
 end
@@ -45,3 +50,7 @@ end
 %rgbImage = label2rgb(labelImage);
 figure;
 imshow(rgbImage);
+title(['Blue: ', num2str(windowClass_count(1)),'(',num2str(windowClass_count(1)/sum(windowClass_count)*100),'%)',...
+    ' Teal: ', num2str(windowClass_count(2)),'(',num2str(windowClass_count(2)/sum(windowClass_count)*100),'%)',...
+    ' Yellow: ', num2str(windowClass_count(3)),'(',num2str(windowClass_count(3)/sum(windowClass_count)*100),'%)',...
+    ' Red: ', num2str(windowClass_count(4)),'(',num2str(windowClass_count(4)/sum(windowClass_count)*100),'%)']);
